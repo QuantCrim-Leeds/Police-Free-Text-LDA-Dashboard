@@ -1,0 +1,23 @@
+# byte compiled
+__pycache__/
+
+
+# data
+transformed_data_source.csv
+data_processed.csv
+Files/*
+model/*
+.ipynb_checkpoints
+/*.egg-info
+
+# processed data files
+*.pkl
+*.gensim
+*.ipynb
+*.mm
+*.mm.index
+
+#exceptions
+
+!Files/.gitkeep
+!model/.gitkeep
