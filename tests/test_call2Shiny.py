@@ -6,9 +6,7 @@ import webbrowser
 
 def invoke_Shiny():
     # process to call shiny app
-    subprocess.call(["/usr/bin/Rscript --vanilla",os.path.join(os.getcwd(),"Shiny/combined.R")])
-
-    #webbrowser.open()
+    subprocess.call(["./Shiny/combined.R"])
 
 
 if __name__ == '__main__':

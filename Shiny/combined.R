@@ -1,3 +1,5 @@
+#! /usr/bin/Rscript
+
 # server file
 # now loading newest dataset
 library(methods)
@@ -13,6 +15,7 @@ library(shiny)
 require(leaflet)
 library(plotly)
 
+print(getwd())
 
 # loading data
 OA_hh <- data.frame(read.csv('./Shiny/static/Leeds_MSOA_2.csv'))
@@ -46,6 +49,8 @@ server <- function(input, output, session) {
 
       # get all output area names
       OA_names <- data.frame(LeedsOA$msoa01cd)
+
+      print('Test if i get here')
 
       colnames(OA_names) <- c('code')
 
@@ -97,7 +102,7 @@ server <- function(input, output, session) {
       })
 
       output$topictext <- renderText(HTML(paste0('<strong>Topic keywords: </strong>',as.character(manip_df$Topic_keywords[1]))))
-      
+
       print('Runs past leaflet section')
       #### Plot_ly segment
 
@@ -114,10 +119,11 @@ server <- function(input, output, session) {
       topictime[,1] <- NULL
 
       # transpose dataframe
-      topictime <- t(topictime)
+      topictime <- data.frame(t(topictime))
 
       # set rows to 1 to 24 month counts
       # unclear this is necessary?
+      # TODO: but needs to be able to handle data with missing months etc 
       #topictime <- data.frame(topictime, row.names = c(input$MonYear[1]:input$MonYear[2]))
 
       # create a dataframe of ordered topics for correct alignment and column naming
@@ -129,7 +135,7 @@ server <- function(input, output, session) {
       colnames(topictime) <- df1$Topic_keywords
 
       # add month year codes
-      topictime$Month2 <- c(input$MonYear[1]:input$MonYear[2])
+      topictime$Month2 <- tibble::rownames_to_column(topictime, 'Month2')
 
       # convert data into tall format for graphing
       data.tall <- melt(topictime,
@@ -145,7 +151,7 @@ server <- function(input, output, session) {
         #ticklen = 25,
         #ticklen
       )
-      
+
       print('Runs past plot_ly data manip')
       # actual plot_ly output
 
@@ -163,7 +169,7 @@ server <- function(input, output, session) {
                                showline = TRUE),
                  showlegend = FALSE)
       )
-      
+
       print('Runs past plot_ly plot')
       #### section for NLP computation of words within reports
       ### this requires tm and slam packages (already loaded)
@@ -314,4 +320,4 @@ ui <- dashboardPage(
   dashboardSidebar(disable = TRUE),
   body)
 
-shinyApp(ui, server)
+runApp(list(ui = ui, server = server), launch.browser = TRUE)

@@ -1,3 +1,5 @@
+# TODO: complete this script
+
 import time
 import subprocess
 import os
@@ -6,31 +8,35 @@ from topic_model_to_Shiny_app.topic_number_selex import topic_number_selector
 from topic_model_to_Shiny_app.LDA_dominant_topic_processing import dominant_topic_processing
 
 # for complete script timing
+def main():
+    start = time.time()
 
-start = time.time()
+    print('Initialising please specify the following parameters.')
 
-print('Initialising please specify the following parameters.')
+    LDA_repeats = int(input("""Please specify the number of LDA repeats for topic number selection\n(n.b The more repeats the longer the runtime): """))
 
-LDA_repeats = int(input("""Please specify the number of LDA repeats for topic number selection\n(n.b The more repeats the longer the runtime): """))
+    existing_model = input('Have you pretrained a working model? (Yes, No) ')
 
-existing_model = input('Have you pretrained a working model? (Yes, No) ')
+    print(existing_model)
+    # check if you need a new model
+    if existing_model.lower() == 'no':
 
-print(existing_model)
-# check if you need a new model
-if existing_model.lower() == 'no':
+        text_preprocessing_start()
 
-    text_preprocessing_start()
+        topic_number_selector(narrow_iter=LDA_repeats)
 
-    topic_number_selector(narrow_iter=LDA_repeats)
+    else:
+        pass
 
-else:
-    pass
+    dominant_topic_processing()
 
-dominant_topic_processing()
+    end = time.time()
 
-end = time.time()
+    print('Time elapsed: ',end-start)
 
-print('Time elapsed: ',end-start)
+    # process to call shiny app
+    subprocess.call(["Shiny/combined.R"])
 
-# process to call shiny app
-subprocess.call(["/usr/bin/Rscript","--vanilla",os.path.join(os.getcwd(),"Shiny/combined.R")])
+if __name__ == '__main__':
+
+    main()

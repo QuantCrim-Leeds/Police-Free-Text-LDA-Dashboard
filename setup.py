@@ -11,7 +11,7 @@ def read_reqs():
 setup(
     name='topic_model_to_Shiny_app',
     url='https://github.com/Sparrow0hawk/topic_model_to_Shiny_app',
-    version=1.1,
+    version=1.2,
     author='Alex Coleman',
     author_email='a.coleman1@leeds.ac.uk',
     description='An implementation of Gensim topic modelling that identifies the number of topics using coherence scores.',

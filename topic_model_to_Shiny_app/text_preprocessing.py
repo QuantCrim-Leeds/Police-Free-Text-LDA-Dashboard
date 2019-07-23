@@ -1,6 +1,7 @@
 # script for preprocessing text data for LDA
 # import libraries
 import sys
+import numpy as np
 import pandas as pd
 import gensim
 import nltk
@@ -27,12 +28,18 @@ def preproccesing():
     print('Tokens lemmatised.')
 
     words = remove_stopwords(words)
-    
+
     print('Stopwords removed.')
 
-    validated_dataframe['Tokens'] = words
+    validated_dataframe.loc[:,'Tokens'] = words
 
-    validated_dataframe['Tokens_str'] = validated_dataframe['Tokens'].apply(lambda x: ','.join(map(str, x)))
+    #create string joined by , if tokens present else add NaN
+    validated_dataframe.loc[:,'Tokens_str'] = validated_dataframe['Tokens'].apply(lambda x: ','.join(map(str, x)) if len(x) != 0 else np.NaN)
+
+    # the above function renders empty lists as NaN
+    # must be removed here and not later
+    # TODO this could be included elsewhere
+    validated_dataframe = validated_dataframe.dropna(axis=0, subset=['Tokens_str'])
 
     output_processed_data(validated_dataframe)
 

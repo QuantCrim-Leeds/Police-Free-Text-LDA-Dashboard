@@ -159,7 +159,8 @@ def data_preparations(data_source, dominant_topic_frame):
                                               'Year',
                                               'CrimeNotes',
                                               'LDA_Topic',
-                                              'Topic_keywords']]
+                                              'Topic_keywords',
+                                              'Tokens']]
 
     # for now we'll run this app for data for one year only
     #app_data_source['Month_Year'] = app_data_source['Month'].map(str) + app_data_source['Year'].astype(str)

@@ -65,13 +65,13 @@ def load_preprocessed():
 
     """
     # import data
-    combined_df = pd.read_csv("./data/data_processed.csv")
+    combined_df = pd.read_csv("./data/data_processed.csv", index_col=0)
 
     # test to ensure tokens are included, will crash if not present
     combined_df['Tokens'] == True
 
     # convert tokens column to list for dictionary and corpus BoW generation
-    token_corpus = combined_df['Tokens_str'].str.split(',')
+    token_corpus = combined_df['Tokens_str'].str.split(',').tolist()
 
     # lets do quick analysis without ngrams
 
