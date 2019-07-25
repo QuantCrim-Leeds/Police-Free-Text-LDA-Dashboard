@@ -42,7 +42,7 @@ def topic_number_selector(narrow_iter=2):
     model_list, coherence_df  = calculate_scores(dictionary=dictionary,
                                                  corpus=corpus,
                                                  texts=crimenotes_corpus,
-                                                 start=2, limit=15, step=5)
+                                                 start=2, limit=100, step=5)
 
     # identify the topic number with the highest coherence score
     wide_coh_score = coherence_df['Num_topics'].max()

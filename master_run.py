@@ -3,9 +3,9 @@
 import time
 import subprocess
 import os
-from topic_model_to_Shiny_app.text_preprocessing import text_preprocessing_start
+from topic_model_to_Shiny_app.text_preprocessing import preproccesing
 from topic_model_to_Shiny_app.topic_number_selex import topic_number_selector
-from topic_model_to_Shiny_app.LDA_dominant_topic_processing import dominant_topic_processing
+from topic_model_to_Shiny_app.dominant_topic_processing import topic_processing
 
 # for complete script timing
 def main():
@@ -21,18 +21,20 @@ def main():
     # check if you need a new model
     if existing_model.lower() == 'no':
 
-        text_preprocessing_start()
+        preproccesing()
 
         topic_number_selector(narrow_iter=LDA_repeats)
 
     else:
         pass
 
-    dominant_topic_processing()
+    topic_processing()
 
     end = time.time()
 
     print('Time elapsed: ',end-start)
+
+    print('Initialising Shiny dashboard.')
 
     # process to call shiny app
     subprocess.call(["Shiny/combined.R"])
