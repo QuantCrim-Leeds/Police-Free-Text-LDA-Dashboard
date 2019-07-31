@@ -147,7 +147,6 @@ terminado=0.8.2=py36_0
 testpath=0.4.2=py_1001
 tika=1.19=pypi_0
 tk=8.6.9=hed695b0_1002
-topic-model-to-shiny-app=1.0=dev_0
 tornado=6.0.3=py36h516909a_0
 traitlets=4.3.2=py36_1000
 twython=3.7.0=py_0
