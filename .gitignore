@@ -21,3 +21,6 @@ model/*
 
 !Files/.gitkeep
 !model/.gitkeep
+
+# testing
+.coverage*
