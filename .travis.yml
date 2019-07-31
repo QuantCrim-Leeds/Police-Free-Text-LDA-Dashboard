@@ -11,5 +11,5 @@ install:
   - conda config --add channels conda-forge
   - conda update -q conda
   - conda info -a
-  - conda create -q -n test-env python=$TRAVIS_PYTHON_VERSION --file requirements.txt
+  - conda test-env create -f environment.yml
   - source activate test-env
