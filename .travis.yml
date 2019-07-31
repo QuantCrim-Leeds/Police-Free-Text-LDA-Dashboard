@@ -5,8 +5,7 @@ install:
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda2/bin:$PATH"
   - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda config --add channels conda-forge
+  - conda config --set always_yes yes --set changeps1 no --add channels conda-forge
   - conda update -q conda
   - conda info -a
   - conda create -q -n test-env python=$TRAVIS_PYTHON_VERSION --file requirements.txt
