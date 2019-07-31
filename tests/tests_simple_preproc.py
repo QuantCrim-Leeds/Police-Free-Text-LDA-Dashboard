@@ -4,6 +4,7 @@
 
 import os
 import unittest
+from unittest.mock import patch
 from topic_model_to_Shiny_app import text_preprocessing
 import pandas as pd
 
@@ -11,7 +12,8 @@ test_dir = os.path.dirname(os.path.abspath(__file__))
 
 class Test(unittest.TestCase):
 
-    def test_initial_data_import(self):
+    @patch('topic_model_to_Shiny_app.text_preprocessing.initial_data_import', return_value=os.path.abspath('./test_data/test_data.csv'))
+    def test_initial_data_import(self, input):
 
         self.data = text_preprocessing.initial_data_import()
 
@@ -33,9 +35,10 @@ class Test(unittest.TestCase):
 
         self.assertEqual(text_preprocessing.remove_stopwords([['the','and','jackal']]), [['jackal']])
 
-    def test_full(self):
+    @patch('topic_model_to_Shiny_app.text_preprocessing.preprocessing', return_value=os.path.abspath('./test_data/test_data.csv'))
+    def test_full(self, input):
 
-        self.data = text_preprocessing.preproccesing()
+        self.data = text_preprocessing.preprocessing()
 
 if __name__ == "__main__":
     unittest.main()

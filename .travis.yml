@@ -15,4 +15,5 @@ install:
   - source activate test-env
 
 script:
-  -./setup.py test
+  - python setup.py install
+  - python tests/tests_simple_preproc.py

@@ -2,7 +2,6 @@
 
 import os
 import subprocess
-import webbrowser
 
 def invoke_Shiny():
     # process to call shiny app

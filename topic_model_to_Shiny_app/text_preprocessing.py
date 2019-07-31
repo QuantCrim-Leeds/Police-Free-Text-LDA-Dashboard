@@ -12,7 +12,7 @@ nltk.download('stopwords')
 nltk.download('wordnet')
 
 # main function that performs preprocessing
-def preproccesing():
+def preprocessing():
     """Complete preprocessing script that outputs dataframe with new tokens column."""
 
     working_dataframe = initial_data_import()
