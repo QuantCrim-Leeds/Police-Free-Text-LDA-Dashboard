@@ -56,6 +56,8 @@ def topic_number_selector(narrow_iter=2):
 
     build_optimum_model(df_x3, corpus, dictionary, crimenotes_corpus)
 
+    return
+
 def load_preprocessed():
     """Load preprocessed data.
 
@@ -202,7 +204,7 @@ def calculate_scores_x3(dictionary, corpus,  texts, topic_n, narrow_iter=2):
 
         coherence_values1 = []
 
-        for iter in range(narrow_iter):
+        for iteration in range(narrow_iter):
             model = gensim.models.wrappers.LdaMallet(mallet_path, corpus=corpus, num_topics=i, id2word=dictionary)
             coherencemodel1 = CoherenceModel(model=model, texts=texts, dictionary=dictionary, coherence='c_v')
             coherence_values1.append(coherencemodel1.get_coherence())

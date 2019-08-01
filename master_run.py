@@ -1,9 +1,9 @@
 # TODO: complete this script
 
 import time
-import subprocess
 import os
-from topic_model_to_Shiny_app.text_preprocessing import preproccesing
+import subprocess
+from topic_model_to_Shiny_app.text_preprocessing import preprocessing
 from topic_model_to_Shiny_app.topic_number_selex import topic_number_selector
 from topic_model_to_Shiny_app.dominant_topic_processing import topic_processing
 
@@ -21,7 +21,7 @@ def main():
     # check if you need a new model
     if existing_model.lower() == 'no':
 
-        preproccesing()
+        preprocessing()
 
         topic_number_selector(narrow_iter=LDA_repeats)
 
@@ -36,8 +36,11 @@ def main():
 
     print('Initialising Shiny dashboard.')
 
+    shiny_dir = os.path.abspath("Shiny/combined.R")
+
     # process to call shiny app
-    subprocess.call(["Shiny/combined.R"])
+    # TODO: this partial path call is a security issue
+    subprocess.call([shiny_dir])
 
 if __name__ == '__main__':
 

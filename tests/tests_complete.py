@@ -5,7 +5,6 @@
 import os
 import unittest
 from unittest.mock import patch
-import numpy as np
 import pandas as pd
 from topic_model_to_Shiny_app import text_preprocessing, topic_number_selex, dominant_topic_processing
 import gensim.models.ldamodel
@@ -49,9 +48,9 @@ class Test(unittest.TestCase):
         self.assertEqual(text_preprocessing.remove_stopwords([['the','and','jackal']]), [['jackal']])
 
     @patch('topic_model_to_Shiny_app.text_preprocessing.preprocessing', return_value=os.path.abspath('./test_data/test_data.csv'))
-    def test_full_preproccesing(self, input):
+    def test_full_preprocessing(self, input):
 
-        self.data = text_preprocessing.preproccesing()
+        self.data = text_preprocessing.preprocessing()
 
     def test_processed_data_import(self):
 
@@ -117,10 +116,10 @@ class Test(unittest.TestCase):
     @patch('topic_model_to_Shiny_app.text_preprocessing.preprocessing', return_value=os.path.abspath('./test_data/test_data.csv'))
     def int_test(self, input):
 
-        # run preproccesing function
+        # run preprocessing function
         # should save data into right places for next function
 
-        self.data = text_preprocessing.preproccesing()
+        self.data = text_preprocessing.preprocessing()
 
         # run topic selector function using output from above preprocessing
         self.data = topic_number_selex.topic_number_selector(narrow_iter=2)
@@ -129,5 +128,5 @@ class Test(unittest.TestCase):
         self.data = dominant_topic_processing.topic_processing()
 
 if __name__ == "__main__":
-    unittest.TestLoader.sortTestMethodsUsing
+
     unittest.main(verbosity=2)

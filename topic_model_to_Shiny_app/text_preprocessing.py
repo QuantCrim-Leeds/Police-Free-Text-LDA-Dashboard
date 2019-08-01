@@ -145,7 +145,7 @@ def n_gram(tokens):
     bigram = gensim.models.phrases.Phrases(tokens, min_count=10, threshold=100)
     trigram = gensim.models.phrases.Phrases(bigram[tokens], threshold = 100)
 
-    for idx in range(len(tokens)):
+    for idx, val in enumerate(tokens):
         for token in bigram[tokens[idx]]:
             if '_' in token:
                 if token not in tokens[idx]:
@@ -166,5 +166,5 @@ def output_processed_data(dataframe):
     dataframe.to_csv('./data/data_processed.csv')
 
     print('Data saved in data folder. Preprocessing complete.')
-    
+
     return

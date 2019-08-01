@@ -51,6 +51,8 @@ def topic_processing():
 
     print('Dominant topic processing complete.')
 
+    return
+
 
 def load_model():
     """
