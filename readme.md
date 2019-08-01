@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Sparrow0hawk/topic_model_to_Shiny.png?branch=master)](https://travis-ci.org/Sparrow0hawk/topic_model_to_Shiny)
+
 # This is an application of topic modelling (that determines topic number) using topic coherence rendering topic data into a Shiny App
 
 This package utilises the Gensim natural language processing library (specificly its wrapper for the Mallet java topic modelling library)

@@ -17,4 +17,4 @@ install:
 
 script:
   - python setup.py install
-  - python tests/tests_simple_preproc.py
+  - python tests/tests_complete.py

@@ -4,6 +4,7 @@
 
 import os
 import unittest
+from unittest.mock import patch
 import numpy as np
 import pandas as pd
 from topic_model_to_Shiny_app import text_preprocessing, topic_number_selex, dominant_topic_processing
@@ -24,8 +25,8 @@ class Test(unittest.TestCase):
 
         self.model = self.class_(corpus, id2word=dictionary, num_topics=3)
 
-
-    def test_initial_data_import(self):
+    @patch('topic_model_to_Shiny_app.text_preprocessing.initial_data_import',return_value=os.path.abspath('./test_data/test_data.csv'))
+    def test_initial_data_import(self, input):
 
         self.data = text_preprocessing.initial_data_import()
 
@@ -46,10 +47,6 @@ class Test(unittest.TestCase):
     def test_remove_stopwords(self):
 
         self.assertEqual(text_preprocessing.remove_stopwords([['the','and','jackal']]), [['jackal']])
-
-    def test_full(self):
-
-        self.data = text_preprocessing.preproccesing()
 
     def test_data_import(self):
 
@@ -104,16 +101,20 @@ class Test(unittest.TestCase):
 
         self.test_data = pd.read_csv('./tests/test_data/PC_to_match.csv', index_col=False)
 
-        self.data = dominant_topic_processing.LSOA_to_PC_matcher(self.test_data)
+        self.data = dominant_topic_processing.OA_to_PC_matcher(self.test_data)[0].split(',')
 
-        # use numpy function to test if arrays are the same
-        np.testing.assert_array_equal(self.data[0], self.test_data.MSOA.str.split(',', expand=True).values[0])
+        self.data_match = self.test_data.MSOA.str.split(',', expand=True).values.tolist()[0]
 
-# integration test
-    def int_test():
+        # function returns list, so assert list items are equal
+        self.assertCountEqual(self.data, self.data_match)
+
+    # integration test
+    @patch('topic_model_to_Shiny_app.text_preprocessing.preprocessing', return_value=os.path.abspath('./test_data/test_data.csv'))
+    def int_test(self, input):
 
         # run preproccesing function
         # should save data into right places for next function
+
         self.data = text_preprocessing.preproccesing()
 
         # run topic selector function using output from above preprocessing

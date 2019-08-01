@@ -21,3 +21,7 @@ model/*
 
 !Files/.gitkeep
 !model/.gitkeep
+
+# coverage
+.coverage
+htmlcov/*

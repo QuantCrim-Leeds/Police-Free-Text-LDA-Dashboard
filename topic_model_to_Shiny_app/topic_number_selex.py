@@ -1,13 +1,13 @@
 # script for determining optimal topic number
 # import libraries
 
+import sys
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import gensim
 from gensim.corpora import Dictionary
 from gensim.models import CoherenceModel
-from sklearn.externals import joblib
 import nltk
 
 
@@ -39,7 +39,7 @@ def topic_number_selector(narrow_iter=2):
     dictionary, corpus = bag_of_word_processing(crimenotes_corpus)
 
     # run broad coherence scan
-    model_list, coherence_df  = calculate_scores(dictionary=dictionary,
+    coherence_df  = calculate_scores(dictionary=dictionary,
                                                  corpus=corpus,
                                                  texts=crimenotes_corpus,
                                                  start=2, limit=100, step=5)
@@ -68,7 +68,10 @@ def load_preprocessed():
     combined_df = pd.read_csv("./data/data_processed.csv", index_col=0)
 
     # test to ensure tokens are included, will crash if not present
-    combined_df['Tokens'] == True
+    if not 'Tokens' in combined_df.columns:
+        print('Loaded dataset appears to have no column Tokens.')
+        print('Please ensure preprocessing was successful.')
+        sys.exit()
 
     # convert tokens column to list for dictionary and corpus BoW generation
     token_corpus = combined_df['Tokens_str'].str.split(',').tolist()
@@ -149,16 +152,13 @@ def calculate_scores(dictionary, corpus,  texts, limit, start=2, step=3):
 
     Returns:
     -------
-    model_list : List of LDA topic models
     coherence_values : Coherence values corresponding to the LDA model with respective number of topics
     graphical outputs
     """
     coherence_dict = dict()
-    model_list = []
 
     for num_topics in range(start, limit, step):
         model = gensim.models.wrappers.LdaMallet(mallet_path, corpus=corpus, num_topics=num_topics, id2word=dictionary)
-        model_list.append(model)
         coherencemodel1 = CoherenceModel(model=model, texts=texts, dictionary=dictionary, coherence='c_v')
         coherence_dict[num_topics] = coherencemodel1.get_coherence()
 
@@ -167,7 +167,6 @@ def calculate_scores(dictionary, corpus,  texts, limit, start=2, step=3):
     coherence_df.columns = ['Num_topics','Coherence_score']
 
     # Show graph
-    x = range(start, limit, step)
     fig, ax = plt.subplots(figsize=(12,10))
     ax.plot(coherence_df['Num_topics'], coherence_df['Coherence_score'])
     ax.set_xlabel("No. of topics", fontweight='bold')
@@ -175,7 +174,7 @@ def calculate_scores(dictionary, corpus,  texts, limit, start=2, step=3):
     ax.axvline(coherence_df[coherence_df['Coherence_score'] == coherence_df['Coherence_score'].max()]['Num_topics'].tolist(), color='red')
     fig.savefig('./Files/broad_topic_k_search.png', format='png',dpi=300)
 
-    return model_list, coherence_df
+    return coherence_df
 
 
 def calculate_scores_x3(dictionary, corpus,  texts, topic_n, narrow_iter=2):
@@ -203,7 +202,7 @@ def calculate_scores_x3(dictionary, corpus,  texts, topic_n, narrow_iter=2):
 
         coherence_values1 = []
 
-        for x in range(narrow_iter):
+        for iter in range(narrow_iter):
             model = gensim.models.wrappers.LdaMallet(mallet_path, corpus=corpus, num_topics=i, id2word=dictionary)
             coherencemodel1 = CoherenceModel(model=model, texts=texts, dictionary=dictionary, coherence='c_v')
             coherence_values1.append(coherencemodel1.get_coherence())
@@ -266,3 +265,5 @@ def build_optimum_model(repeated_test_frame, corpus, dictionary, texts):
 
     gensim.corpora.MmCorpus.serialize("./data/BoW_corpus.mm", corpus)
     print('Model saved.')
+
+    return
