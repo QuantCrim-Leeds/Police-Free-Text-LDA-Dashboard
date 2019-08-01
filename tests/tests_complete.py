@@ -48,7 +48,7 @@ class Test(unittest.TestCase):
 
         self.assertEqual(text_preprocessing.remove_stopwords([['the','and','jackal']]), [['jackal']])
 
-    def test_data_import(self):
+    def test_processed_data_import(self):
 
         self.data = topic_number_selex.load_preprocessed()
 
@@ -124,4 +124,5 @@ class Test(unittest.TestCase):
         self.data = dominant_topic_processing.topic_processing()
 
 if __name__ == "__main__":
+    unittest.TestLoader.sortTestMethodsUsing
     unittest.main(verbosity=2)
