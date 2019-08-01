@@ -22,6 +22,11 @@ model/*
 !Files/.gitkeep
 !model/.gitkeep
 
+<<<<<<< HEAD
 # coverage
 .coverage
 htmlcov/*
+=======
+# testing
+.coverage*
+>>>>>>> a964b61347b78441548d18912fdfd49416ea3808
