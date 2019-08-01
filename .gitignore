@@ -25,3 +25,4 @@ model/*
 # coverage
 .coverage
 htmlcov/*
+coverage.xml
