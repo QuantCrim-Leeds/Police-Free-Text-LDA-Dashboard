@@ -166,3 +166,5 @@ def output_processed_data(dataframe):
     dataframe.to_csv('./data/data_processed.csv')
 
     print('Data saved in data folder. Preprocessing complete.')
+    
+    return

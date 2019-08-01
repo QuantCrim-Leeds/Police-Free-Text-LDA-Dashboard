@@ -49,7 +49,7 @@ class Test(unittest.TestCase):
         self.assertEqual(text_preprocessing.remove_stopwords([['the','and','jackal']]), [['jackal']])
 
     @patch('topic_model_to_Shiny_app.text_preprocessing.preprocessing', return_value=os.path.abspath('./test_data/test_data.csv'))
-    def int_full_preproccesing(self, input):
+    def test_full_preproccesing(self, input):
 
         self.data = text_preprocessing.preproccesing()
 
