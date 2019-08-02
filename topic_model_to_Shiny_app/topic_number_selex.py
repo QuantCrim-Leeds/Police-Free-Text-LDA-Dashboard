@@ -14,14 +14,14 @@ import nltk
 # specify path to mallet
 mallet_path = './mallet-2.0.8/bin/mallet' # update this path
 
-def topic_number_selector(narrow_iter=2):
+def topic_number_selector(processed_data, narrow_iter=2):
     """
     A function for determining the optimal topic number based on coherence score.
     narrow_iter = number of LDA model repeats
 
     Inputs:
     mallet_path = the path to mallet binaries
-    the data_processed.pkl file from text_preprocessing.py, contains preprocessed text
+    pd.Dataframe of processed data
 
     Outputs:
     broad_topic_k_search graph file to Files dir
@@ -33,7 +33,7 @@ def topic_number_selector(narrow_iter=2):
     print('Beginning topic number optimisation.')
 
     # load data with tokens
-    crimenotes_corpus = load_preprocessed()
+    crimenotes_corpus = load_preprocessed(processed_data)
 
     # create a dictionary and a corpus in BoW format
     dictionary, corpus = bag_of_word_processing(crimenotes_corpus)
@@ -58,7 +58,7 @@ def topic_number_selector(narrow_iter=2):
 
     return
 
-def load_preprocessed():
+def load_preprocessed(processed_data):
     """Load preprocessed data.
 
     Check tokens are included.
@@ -66,8 +66,10 @@ def load_preprocessed():
     Output analysis of word frequency across entire corpus
 
     """
+
     # import data
-    combined_df = pd.read_csv("./data/data_processed.csv", index_col=0)
+    # this has been modified to a pass file rather than loading from disk
+    combined_df = processed_data
 
     # test to ensure tokens are included, will crash if not present
     if not 'Tokens' in combined_df.columns:

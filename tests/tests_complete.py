@@ -24,15 +24,21 @@ class Test(unittest.TestCase):
 
         self.model = self.class_(corpus, id2word=dictionary, num_topics=3)
 
-    @patch('topic_model_to_Shiny_app.text_preprocessing.initial_data_import',return_value=os.path.abspath('./test_data/test_data.csv'))
+    @patch('builtins.input',return_value=os.path.abspath('./tests/test_data/test_data.csv'))
     def test_initial_data_import(self, input):
 
         self.data = text_preprocessing.initial_data_import()
+
+        print(self.data)
+
+        self.assertTrue(isinstance(self.data, pd.DataFrame))
 
     def test_validate_input_data(self):
 
         self.data = text_preprocessing.validate_input_data(pd.read_csv(os.path.join(test_dir, 'test_data/test_data.csv'),
                                                                        encoding='latin'))
+
+        self.assertEqual(self.data.CrimeNotes.isna().sum(), 0)
 
     def test_doc_to_words(self):
 
@@ -47,14 +53,22 @@ class Test(unittest.TestCase):
 
         self.assertEqual(text_preprocessing.remove_stopwords([['the','and','jackal']]), [['jackal']])
 
-    @patch('topic_model_to_Shiny_app.text_preprocessing.preprocessing', return_value=os.path.abspath('./test_data/test_data.csv'))
+    @patch('builtins.input',return_value=os.path.abspath('./tests/test_data/test_data.csv'))
     def test_full_preprocessing(self, input):
 
         self.data = text_preprocessing.preprocessing()
 
+        self.assertTrue(isinstance(self.data, pd.DataFrame))
+
+        self.assertEqual(self.data.CrimeNotes.isna().sum(), 0)
+
     def test_processed_data_import(self):
 
-        self.data = topic_number_selex.load_preprocessed()
+        self.frame = pd.read_csv(os.path.join(test_dir, 'test_data/test_processed_data.csv'), encoding='latin')
+
+        self.data = topic_number_selex.load_preprocessed(self.frame)
+
+        self.assertTrue(isinstance(self.data, list))
 
     def test_processing(self):
 
@@ -68,6 +82,10 @@ class Test(unittest.TestCase):
                                                         limit = 5,
                                                         start = 2, step = 3)
 
+        self.assertTrue(isinstance(self.data, pd.DataFrame))
+
+        self.assertEqual(self.data.columns.tolist(), ['Num_topics','Coherence_score'])
+
     def test_narrow_coherence_search(self):
 
         self.data = topic_number_selex.calculate_scores_x3(dictionary = common_dictionary,
@@ -76,18 +94,22 @@ class Test(unittest.TestCase):
                                                            topic_n = range(5, 5 + 6),
                                                            narrow_iter=2)
 
+        self.assertTrue(isinstance(self.data, pd.DataFrame))
+
 
     def test_build_model(self):
 
-        self.data = topic_number_selex.build_optimum_model(repeated_test_frame = pd.DataFrame.from_dict({ 2 : [0.5],
-                                                                                                         2 : [0.45],
-                                                                                                         2 : [0.43],
-                                                                                                         3 : [0.47],
-                                                                                                         3 : [0.3],
-                                                                                                         4 : [0.36],
-                                                                                                         4 : [0.39],
-                                                                                                         5 : [0.46],
-                                                                                                         5 : [0.48]}),
+        self.input_dict = (pd.DataFrame.from_dict({ 2 : [0.5],
+                                                 2 : [0.45],
+                                                 2 : [0.43],
+                                                 3 : [0.47],
+                                                 3 : [0.3],
+                                                 4 : [0.36],
+                                                 4 : [0.39],
+                                                 5 : [0.46],
+                                                 5 : [0.48]}))
+
+        self.data = topic_number_selex.build_optimum_model(repeated_test_frame = self.input_dict,
                                                           corpus = common_corpus,
                                                           dictionary = common_dictionary,
                                                           texts = common_texts)
@@ -99,7 +121,7 @@ class Test(unittest.TestCase):
 
         self.data = dominant_topic_processing.format_topics_sentences(model1, corpus, common_texts)
 
-        self.assertEqual(type(self.data), type(pd.DataFrame()))
+        self.assertTrue(isinstance(self.data, pd.DataFrame))
 
     def test_LSOA_matcherr(self):
 
@@ -112,8 +134,23 @@ class Test(unittest.TestCase):
         # function returns list, so assert list items are equal
         self.assertCountEqual(self.data, self.data_match)
 
+    def test_get_top3(self):
+        """
+        this is a integration style test taking output of format_topics_sentences
+        TODO: Make this a proper unit test
+        """
+
+        model1 = self.class_(corpus, id2word=dictionary, num_topics=3)
+
+        self.data = dominant_topic_processing.format_topics_sentences(model1, corpus, common_texts)
+
+        self.top3 = dominant_topic_processing.get_top3_docs(self.data)
+
+        self.assertTrue(isinstance(self.top3, pd.DataFrame))
+
+
     # integration test
-    @patch('topic_model_to_Shiny_app.text_preprocessing.preprocessing', return_value=os.path.abspath('./test_data/test_data.csv'))
+    @patch('builtins.input',return_value=os.path.abspath('./tests/test_data/test_data.csv'))
     def int_test(self, input):
 
         # run preprocessing function
@@ -122,7 +159,7 @@ class Test(unittest.TestCase):
         self.data = text_preprocessing.preprocessing()
 
         # run topic selector function using output from above preprocessing
-        self.data = topic_number_selex.topic_number_selector(narrow_iter=2)
+        self.data = topic_number_selex.topic_number_selector(self.data, narrow_iter=2)
 
         # run dominant topic processing
         self.data = dominant_topic_processing.topic_processing()

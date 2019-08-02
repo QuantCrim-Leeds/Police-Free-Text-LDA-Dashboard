@@ -5,7 +5,6 @@
 # develop some unit tests
 # import libraries
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import gensim
 from gensim.corpora.mmcorpus import MmCorpus
@@ -54,6 +53,7 @@ def topic_processing():
     return
 
 
+# is this necessary if we don't have a model?
 def load_model():
     """
     Load working model

@@ -43,6 +43,8 @@ def preprocessing():
 
     output_processed_data(validated_dataframe)
 
+    return validated_dataframe
+
 
 def initial_data_import():
     """Imports initial .csv dataframe converts into pandas object."""

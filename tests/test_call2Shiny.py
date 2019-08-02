@@ -4,8 +4,11 @@ import os
 import subprocess
 
 def invoke_Shiny():
+
+    shiny_dir = os.path.abspath("Shiny/combined.R")
     # process to call shiny app
-    subprocess.call(["./Shiny/combined.R"])
+    # TODO: this partial path call is a security issue
+    subprocess.call([shiny_dir])
 
 
 if __name__ == '__main__':
