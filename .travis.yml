@@ -19,6 +19,6 @@ install:
 script:
   - python setup.py install
   - python tests/tests_complete.py
-  - coverage run tests/test_complete.py
+  - coverage run tests/tests_complete.py
   - coverage xml
   - python-codacy-coverage -r coverage.xml
