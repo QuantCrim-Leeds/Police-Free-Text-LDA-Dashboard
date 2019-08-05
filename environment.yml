@@ -1,4 +1,4 @@
-name: test-env
+name: topicmodel1
 channels:
   - conda-forge
   - defaults
