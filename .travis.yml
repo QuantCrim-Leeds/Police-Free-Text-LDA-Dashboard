@@ -13,8 +13,12 @@ install:
   - conda update -q conda
   - conda info -a
   - conda env create -f environment.yml
+  - pip install coverage
   - source activate test-env
 
 script:
   - python setup.py install
   - python tests/tests_complete.py
+  - coverage run tests/test_all.py
+  - coverage xml
+  - python-codacy-coverage -r coverage.xml
