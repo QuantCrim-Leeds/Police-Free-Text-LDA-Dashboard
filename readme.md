@@ -15,6 +15,6 @@ LDA_dominant_topic_processing - Dominant topic labelling
 
 Data format expected for this is:
 
-| Identifier  | CrimeType  | OccType  | Day  | Mon  | PartialPostCode | MODescription | CrimeNotes | HOClass| OffenceRec | DomViol |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| int | string category | string category | 3-letter day code | 3-letter month code | 4-5 level postcode | string keywords | string text | string code | string category | Y/N |
+| Identifier | CrimeType       | OccType         | Day               | Mon                 | PartialPostCode    | MODescription  | CrimeNotes  | HOClass     | OffenceRec      | DomViol |
+| ---------- | --------------- | --------------- | ----------------- | ------------------- | ------------------ | -------------- | ----------- | ----------- | --------------- | ------- |
+| int        | string category | string category | 3-letter day code | 3-letter month code | 4-5 level postcode | string keywords | string text | string code | string category | Y/N     |
