@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Sparrow0hawk/topic_model_to_Shiny.png?branch=master)](https://travis-ci.org/Sparrow0hawk/topic_model_to_Shiny)
+[![Build Status](https://travis-ci.com/Sparrow0hawk/topic_model_to_Shiny.svg?token=WAzszY1JKmTcLxy5prby&branch=master)](https://travis-ci.com/Sparrow0hawk/topic_model_to_Shiny)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/9bc12c76cc934008b3e081149de02b78)](https://www.codacy.com?utm_source=github.com&utm_medium=referral&utm_content=Sparrow0hawk/topic_model_to_Shiny&utm_campaign=Badge_Coverage)
 
 # Topic Model to Shiny App
