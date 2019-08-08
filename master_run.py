@@ -22,9 +22,9 @@ def main():
     # check if you need a new model
     if existing_model.lower() == 'no':
 
-        preprocessing()
+        transformed_data = preprocessing()
 
-        topic_number_selector(narrow_iter=LDA_repeats)
+        topic_number_selector(processed_data = transformed_data, narrow_iter = LDA_repeats)
 
     else:
         pass

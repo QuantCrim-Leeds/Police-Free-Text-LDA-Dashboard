@@ -164,6 +164,9 @@ class Test(unittest.TestCase):
         # run dominant topic processing
         self.data = dominant_topic_processing.topic_processing()
 
+        # check output file exists by loading as pandas and comparing
+        assertEqual(isinstance(pd.read_csv('./data/transformed_data_source.csv'), pd.DataFrame))
+
 if __name__ == "__main__":
 
     unittest.main(verbosity=2)

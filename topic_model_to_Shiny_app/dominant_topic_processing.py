@@ -89,7 +89,7 @@ def format_topics_sentences(ldamodel, corpus, texts):
 
     # Get main topic in each document
     # enumerate each topic and return number of topic, row of topic numbers and probabilities
-    for i, row in enumerate(ldamodel[corpus]):
+    for row in ldamodel[corpus]:
         # sort row data into descending order
         row = sorted(row, key=lambda x: (x[1]), reverse=True)
         # Get the Dominant topic, Perc Contribution and Keywords for each document

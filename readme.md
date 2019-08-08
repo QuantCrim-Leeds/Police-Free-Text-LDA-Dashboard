@@ -4,7 +4,8 @@
 
 # Topic Model to Shiny App
 
-This is an application of topic modelling (that determines topic number) using topic coherence rendering topic data into a Shiny App. This package utilises the Gensim natural language processing library (specificly its wrapper for the Mallet java topic modelling library)
+This is an application of topic modelling (that determines topic number) using topic coherence rendering topic data into a Shiny App. This package utilises the Gensim natural language processing library (specificly its wrapper for the Mallet java topic modelling library).
+The Mallet java library is included in this package for ease of use but full credit and details can be found [here](https://github.com/mimno/Mallet).
 
 ## Included modules
 
