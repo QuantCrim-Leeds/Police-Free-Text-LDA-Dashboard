@@ -68,7 +68,7 @@ def load_model():
     """
 
     # load data
-    combined_df = pd.read_csv(pkg_resources.resource_filename(resource_package, "data/data_processed.csv", index_col=0))
+    combined_df = pd.read_csv(pkg_resources.resource_filename(resource_package, "data/data_processed.csv"), index_col=0)
 
     corpus = MmCorpus(pkg_resources.resource_filename(resource_package, "data/BoW_corpus.mm"))
     print('Data loaded.')

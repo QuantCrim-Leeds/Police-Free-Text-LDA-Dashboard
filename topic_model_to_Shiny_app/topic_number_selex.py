@@ -179,7 +179,7 @@ def calculate_scores(dictionary, corpus,  texts, limit, start=2, step=3):
     ax.set_xlabel("No. of topics", fontweight='bold')
     ax.set_ylabel("Cv Coherence score", fontweight='bold')
     ax.axvline(coherence_df[coherence_df['Coherence_score'] == coherence_df['Coherence_score'].max()]['Num_topics'].tolist(), color='red')
-    fig.savefig(pkg_resources.resource_filename(resource_package, 'Files/broad_topic_k_search.png', format='png',dpi=300))
+    fig.savefig(pkg_resources.resource_filename(resource_package, 'Files/broad_topic_k_search.png'), format='png',dpi=300)
 
     return coherence_df
 
@@ -271,7 +271,7 @@ def build_optimum_model(repeated_test_frame, corpus, dictionary, texts):
     # save new working model
     working_ldamallet.save(pkg_resources.resource_filename(resource_package, 'model/working_ldamallet_model.gensim'))
 
-    gensim.corpora.MmCorpus.serialize(pkg_resources.resource_filename(resource_package, 'data/BoW_corpus.mm', corpus))
+    gensim.corpora.MmCorpus.serialize(pkg_resources.resource_filename(resource_package, 'data/BoW_corpus.mm'), corpus)
     print('Model saved.')
 
     return

@@ -26,3 +26,4 @@ topic_model_to_Shiny_app/model/*
 .coverage
 htmlcov/*
 coverage.xml
+.Rproj.user

@@ -12,18 +12,18 @@ library(utils)
 library(stats)
 library(shinydashboard)
 library(shiny)
-require(leaflet)
+library(leaflet)
 library(plotly)
+library(here)
 
-print(getwd())
 
 # loading data
-OA_hh <- data.frame(read.csv('./Shiny/static/Leeds_MSOA_2.csv'))
+OA_hh <- data.frame(read.csv(here('topic_model_to_Shiny_app','Shiny','static','Leeds_MSOA_2.csv')))
 
-LeedsOA <- geojsonio::geojson_read("./Shiny/static/Leeds_MSOA.geojson", what = 'sp')
+LeedsOA <- geojsonio::geojson_read(here('topic_model_to_Shiny_app','Shiny','static','Leeds_MSOA.geojson'), what = 'sp')
 
 # only first 10 cols are there are no others
-LDA_df <- data.frame(read.csv('./data/transformed_data_source.csv', row.names='X'))
+LDA_df <- data.frame(read.csv(here('topic_model_to_Shiny_app','data','transformed_data_source.csv'), row.names='X'))
 
 server <- function(input, output, session) {
 

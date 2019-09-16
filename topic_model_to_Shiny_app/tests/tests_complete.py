@@ -57,7 +57,7 @@ class Test(unittest.TestCase):
 
         self.assertEqual(text_preprocessing.remove_stopwords([['the','and','jackal']]), [['jackal']])
 
-    @patch('builtins.input',return_value=pkg_resources.resource_filename(resource_package,' tests/test_data/test_data.csv'))
+    @patch('builtins.input',return_value=pkg_resources.resource_filename(resource_package,'tests/test_data/test_data.csv'))
     def test_full_preprocessing(self, input):
 
         self.data = text_preprocessing.preprocessing()
