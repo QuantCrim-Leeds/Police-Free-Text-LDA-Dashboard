@@ -1,6 +1,6 @@
 include requirements.txt
 include README.md
-recursive-include tests *
+recursive-include topic_model_to_Shiny_app/tests *
 recursive-include topic_model_to_Shiny_app/data *
 recursive-include topic_model_to_Shiny_app/Files *
 recursive-include topic_model_to_Shiny_app/Shiny *

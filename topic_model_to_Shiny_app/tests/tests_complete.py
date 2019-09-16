@@ -129,7 +129,7 @@ class Test(unittest.TestCase):
 
     def test_LSOA_matcherr(self):
 
-        self.test_data = pd.read_csv(pkg_resources.resource_filename(resource_package,'tests/tests/test_data/PC_to_match.csv'),
+        self.test_data = pd.read_csv(pkg_resources.resource_filename(resource_package,'tests/test_data/PC_to_match.csv'),
                                      index_col=False)
 
         self.data = dominant_topic_processing.OA_to_PC_matcher(self.test_data)[0].split(',')
@@ -171,7 +171,7 @@ class Test(unittest.TestCase):
 
         # check output file exists by loading as pandas and comparing
         assertEqual(isinstance(pd.read_csv(pkg_resources.resource_filename(resource_package,'data/transformed_data_source.csv'),
-                               pd.DataFrame))
+                               pd.DataFrame)))
 
 if __name__ == "__main__":
 

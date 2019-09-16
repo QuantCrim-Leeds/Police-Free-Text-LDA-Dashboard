@@ -140,7 +140,7 @@ def remove_stopwords(text):
     """Removes stopwords using WordNet english list and and additionals passed to stopword.txt file."""
     # removing stop words from the data
     stop_words = stopwords.words('english')
-    stop_words.extend([line.strip() for line in open(pkg_resources.resource_filename(resource_package, 'data/stopwords.txt')])
+    stop_words.extend([line.strip() for line in open(pkg_resources.resource_filename(resource_package, 'data/stopwords.txt'))])
 
     return [[word for word in gensim.utils.simple_preprocess(str(doc)) if word not in stop_words] for doc in text]
 
