@@ -10,9 +10,12 @@ from topic_model_to_Shiny_app import text_preprocessing, topic_number_selex, dom
 import gensim.models.ldamodel
 from gensim.corpora import Dictionary
 from gensim.test.utils import common_texts, common_dictionary, common_corpus
+import pkg_resources
 
 dictionary = Dictionary(common_texts)
 corpus = [dictionary.doc2bow(text) for text in common_texts]
+
+resource_package = 'topic_model_to_Shiny_app'
 
 test_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -24,7 +27,7 @@ class Test(unittest.TestCase):
 
         self.model = self.class_(corpus, id2word=dictionary, num_topics=3)
 
-    @patch('builtins.input',return_value=os.path.abspath('./tests/test_data/test_data.csv'))
+    @patch('builtins.input',return_value=pkg_resources.resource_filename(resource_package, 'tests/test_data/test_data.csv'))
     def test_initial_data_import(self, input):
 
         self.data = text_preprocessing.initial_data_import()
@@ -35,7 +38,8 @@ class Test(unittest.TestCase):
 
     def test_validate_input_data(self):
 
-        self.data = text_preprocessing.validate_input_data(pd.read_csv(os.path.join(test_dir, 'test_data/test_data.csv'),
+        self.data = text_preprocessing.validate_input_data(
+                    pd.read_csv(pkg_resources.resource_filename(resource_package, 'tests/test_data/test_data.csv'),
                                                                        encoding='latin'))
 
         self.assertEqual(self.data.CrimeNotes.isna().sum(), 0)
@@ -53,7 +57,7 @@ class Test(unittest.TestCase):
 
         self.assertEqual(text_preprocessing.remove_stopwords([['the','and','jackal']]), [['jackal']])
 
-    @patch('builtins.input',return_value=os.path.abspath('./tests/test_data/test_data.csv'))
+    @patch('builtins.input',return_value=pkg_resources.resource_filename(resource_package,' tests/test_data/test_data.csv'))
     def test_full_preprocessing(self, input):
 
         self.data = text_preprocessing.preprocessing()
@@ -64,7 +68,7 @@ class Test(unittest.TestCase):
 
     def test_processed_data_import(self):
 
-        self.frame = pd.read_csv(os.path.join(test_dir, 'test_data/test_processed_data.csv'), encoding='latin')
+        self.frame = pd.read_csv(pkg_resources.resource_filename(resource_package, 'tests/test_data/test_processed_data.csv'), encoding='latin')
 
         self.data = topic_number_selex.load_preprocessed(self.frame)
 
@@ -125,7 +129,8 @@ class Test(unittest.TestCase):
 
     def test_LSOA_matcherr(self):
 
-        self.test_data = pd.read_csv('./tests/test_data/PC_to_match.csv', index_col=False)
+        self.test_data = pd.read_csv(pkg_resources.resource_filename(resource_package,'tests/tests/test_data/PC_to_match.csv'),
+                                     index_col=False)
 
         self.data = dominant_topic_processing.OA_to_PC_matcher(self.test_data)[0].split(',')
 
@@ -150,7 +155,7 @@ class Test(unittest.TestCase):
 
 
     # integration test
-    @patch('builtins.input',return_value=os.path.abspath('./tests/test_data/test_data.csv'))
+    @patch('builtins.input',return_value=pkg_resources.resource_filename(resource_package, 'tests/test_data/test_data.csv'))
     def int_test(self, input):
 
         # run preprocessing function
@@ -165,7 +170,8 @@ class Test(unittest.TestCase):
         self.data = dominant_topic_processing.topic_processing()
 
         # check output file exists by loading as pandas and comparing
-        assertEqual(isinstance(pd.read_csv('./data/transformed_data_source.csv'), pd.DataFrame))
+        assertEqual(isinstance(pd.read_csv(pkg_resources.resource_filename(resource_package,'data/transformed_data_source.csv'),
+                               pd.DataFrame))
 
 if __name__ == "__main__":
 
