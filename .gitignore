@@ -27,3 +27,5 @@ topic_model_to_Shiny_app/model/*
 htmlcov/*
 coverage.xml
 .Rproj.user
+
+short_test.py

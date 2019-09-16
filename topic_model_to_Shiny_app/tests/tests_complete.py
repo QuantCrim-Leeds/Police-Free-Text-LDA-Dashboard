@@ -156,6 +156,7 @@ class Test(unittest.TestCase):
 
     # integration test
     @patch('builtins.input',return_value=pkg_resources.resource_filename(resource_package, 'tests/test_data/test_data.csv'))
+    @patch('builtins.input',return_value=os.path.join(resource_package, 'File/'))
     def int_test(self, input):
 
         # run preprocessing function

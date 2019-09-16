@@ -4,17 +4,19 @@
 # TODO ordering of dominant_topic_processing function needs function calls adding
 # develop some unit tests
 # import libraries
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import gensim
 from gensim.corpora.mmcorpus import MmCorpus
 import pkg_resources
+import pathlib
 
 # specify top level package folder
 resource_package = 'topic_model_to_Shiny_app'
 
 
-def topic_processing():
+def topic_processing(output_path):
     """
     Applying dominant topic labelling to processed corpus.
     -------
@@ -34,14 +36,15 @@ def topic_processing():
 
     (corpus, ldamallet, combined_df) = load_model()
 
-    top20_df = format_topics_sentences(ldamodel=ldamallet, corpus=corpus, texts=combined_df['CrimeNotes'])
+    top20_df = format_topics_sentences(ldamodel=ldamallet, corpus=corpus,
+                                       texts=combined_df['CrimeNotes'], output_path=output_path)
 
     print('Dominant topic segmentation complete.')
 
     # commenting out for testing
     representative_docs = get_top3_docs(top20_df)
 
-    representative_docs.to_csv(pkg_resources.resource_filename(resource_package, 'Files/Example_MOs_per_topic.csv'))
+    representative_docs.to_csv(os.path.join(output_path, 'Example_MOs_per_topic.csv'))
 
     print('Example MOs written to Files folder.')
 
@@ -78,7 +81,7 @@ def load_model():
     # write out topics to a text file
     topics = ldamallet.print_topics(num_topics=-1, num_words=7)
 
-    with open(pkg_resources.resource_filename(resource_package, 'Files/LDA_topics.txt'), 'w') as topic_file:
+    with open(os.path.join(output_path, 'LDA_topics.txt'), 'w') as topic_file:
         for topic in topics:
             topic_file.write(str(topic) + '\n')
     print('Topics written to data folder.')
@@ -86,7 +89,7 @@ def load_model():
     return (corpus, ldamallet, combined_df)
 
 # inputs are model, corpus and original texts
-def format_topics_sentences(ldamodel, corpus, texts):
+def format_topics_sentences(ldamodel, corpus, texts, output_path):
     # Init output
     sent_topics_df = pd.DataFrame()
 
@@ -119,7 +122,7 @@ def format_topics_sentences(ldamodel, corpus, texts):
     sent_topics_df['Dominant_Topic'].value_counts().sort_index().plot(kind='bar', figsize=(12, 10))
     plt.xlabel('Topic number', fontweight='bold')
     plt.ylabel('Number of docs', fontweight='bold')
-    plt.savefig(pkg_resources.resource_filename(resource_package, 'Files/Docs_per_Topic.png'), format='png', dpi=300)
+    plt.savefig(os.path.join(output_path, 'Docs_per_Topic.png'), format='png', dpi=300)
 
     return sent_topics_df
 

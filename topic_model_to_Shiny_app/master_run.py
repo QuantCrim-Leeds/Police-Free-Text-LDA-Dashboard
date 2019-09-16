@@ -20,6 +20,10 @@ def main():
 
     LDA_repeats = int(input("""Please specify the number of LDA repeats for topic number selection\n(n.b The more repeats the longer the runtime): """))
 
+    output_path = str(input('Specify a path for output files: '))
+
+    pathlib.Path(output_path).mkdir(parents=False, exist_ok=True)
+
     existing_model = input('Have you pretrained a working model? (Yes, No) ')
 
     print(existing_model)
@@ -28,12 +32,13 @@ def main():
 
         transformed_data = preprocessing()
 
-        topic_number_selector(processed_data = transformed_data, narrow_iter = LDA_repeats)
+        topic_number_selector(processed_data = transformed_data, output_path=output_path,
+                              narrow_iter = LDA_repeats, wide_iter = 100)
 
     else:
         pass
 
-    topic_processing()
+    topic_processing(output_path=output_path)
 
     end = time.time()
 
