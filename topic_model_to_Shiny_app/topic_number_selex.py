@@ -9,10 +9,13 @@ import gensim
 from gensim.corpora import Dictionary
 from gensim.models import CoherenceModel
 import nltk
+import pkg_resources
 
+# specify top level package folder
+resource_package = 'topic_model_to_Shiny_app'
 
 # specify path to mallet
-mallet_path = './mallet-2.0.8/bin/mallet' # update this path
+mallet_path = pkg_resources.resource_filename(resource_package, 'mallet-2.0.8/bin/mallet') # update this path
 
 def topic_number_selector(processed_data, narrow_iter=2):
     """
@@ -176,7 +179,7 @@ def calculate_scores(dictionary, corpus,  texts, limit, start=2, step=3):
     ax.set_xlabel("No. of topics", fontweight='bold')
     ax.set_ylabel("Cv Coherence score", fontweight='bold')
     ax.axvline(coherence_df[coherence_df['Coherence_score'] == coherence_df['Coherence_score'].max()]['Num_topics'].tolist(), color='red')
-    fig.savefig('./Files/broad_topic_k_search.png', format='png',dpi=300)
+    fig.savefig(pkg_resources.resource_filename(resource_package, 'Files/broad_topic_k_search.png', format='png',dpi=300))
 
     return coherence_df
 
@@ -227,7 +230,7 @@ def calculate_scores_x3(dictionary, corpus,  texts, topic_n, narrow_iter=2):
     ax.boxplot(final_df.values, positions=final_df.columns.tolist())
     ax.set_xlabel('No. of topics', fontweight='bold')
     ax.set_ylabel('Cv Coherence Score', fontweight='bold')
-    fig.savefig('./Files/multiple_run_ktopics.png',format='png', dpi=300)
+    fig.savefig(pkg_resources.resource_filename(resource_package, 'Files/multiple_run_ktopics.png'),format='png', dpi=300)
 
     return final_df
 
@@ -255,7 +258,8 @@ def build_optimum_model(repeated_test_frame, corpus, dictionary, texts):
                                                 corpus = corpus,
                                                 num_topics = int(optimum_topic_k),
                                                 id2word = dictionary,
-                                                prefix = './model/')
+                                                prefix = pkg_resources.resource_filename(resource_package, 'model/')
+                                                )
     print('Model trained.')
     coherencemodel1 = CoherenceModel(model = working_ldamallet,
                                      texts = texts,
@@ -265,9 +269,9 @@ def build_optimum_model(repeated_test_frame, corpus, dictionary, texts):
     print('Working model coherence score: ', coherencemodel1.get_coherence())
 
     # save new working model
-    working_ldamallet.save('./model/working_ldamallet_model.gensim')
+    working_ldamallet.save(pkg_resources.resource_filename(resource_package, 'model/working_ldamallet_model.gensim'))
 
-    gensim.corpora.MmCorpus.serialize("./data/BoW_corpus.mm", corpus)
+    gensim.corpora.MmCorpus.serialize(pkg_resources.resource_filename(resource_package, 'data/BoW_corpus.mm', corpus))
     print('Model saved.')
 
     return

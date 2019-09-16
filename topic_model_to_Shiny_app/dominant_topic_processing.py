@@ -8,7 +8,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import gensim
 from gensim.corpora.mmcorpus import MmCorpus
+import pkg_resources
 
+# specify top level package folder
+resource_package = 'topic_model_to_Shiny_app'
 
 
 def topic_processing():
@@ -38,13 +41,13 @@ def topic_processing():
     # commenting out for testing
     representative_docs = get_top3_docs(top20_df)
 
-    representative_docs.to_csv('./Files/Example_MOs_per_topic.csv')
+    representative_docs.to_csv(pkg_resources.resource_filename(resource_package, 'Files/Example_MOs_per_topic.csv'))
 
     print('Example MOs written to Files folder.')
 
     data_for_app = data_preparations(combined_df, top20_df)
 
-    data_for_app.to_csv('./data/transformed_data_source.csv')
+    data_for_app.to_csv(pkg_resources.resource_filename(resource_package, 'data/transformed_data_source.csv'))
 
     print('Transformed data saved in data folder.')
 
@@ -65,17 +68,17 @@ def load_model():
     """
 
     # load data
-    combined_df = pd.read_csv("./data/data_processed.csv", index_col=0)
+    combined_df = pd.read_csv(pkg_resources.resource_filename(resource_package, "data/data_processed.csv", index_col=0))
 
-    corpus = MmCorpus("./data/BoW_corpus.mm")
+    corpus = MmCorpus(pkg_resources.resource_filename(resource_package, "data/BoW_corpus.mm"))
     print('Data loaded.')
     # load the mallet model
-    ldamallet = gensim.models.wrappers.LdaMallet.load('./model/working_ldamallet_model.gensim')
+    ldamallet = gensim.models.wrappers.LdaMallet.load(pkg_resources.resource_filename(resource_package, 'model/working_ldamallet_model.gensim'))
     print('Model loaded.')
     # write out topics to a text file
     topics = ldamallet.print_topics(num_topics=-1, num_words=7)
 
-    with open('./Files/LDA_topics.txt', 'w') as topic_file:
+    with open(pkg_resources.resource_filename(resource_package, 'Files/LDA_topics.txt'), 'w') as topic_file:
         for topic in topics:
             topic_file.write(str(topic) + '\n')
     print('Topics written to data folder.')
@@ -116,7 +119,7 @@ def format_topics_sentences(ldamodel, corpus, texts):
     sent_topics_df['Dominant_Topic'].value_counts().sort_index().plot(kind='bar', figsize=(12, 10))
     plt.xlabel('Topic number', fontweight='bold')
     plt.ylabel('Number of docs', fontweight='bold')
-    plt.savefig('./Files/Docs_per_Topic.png', format='png', dpi=300)
+    plt.savefig(pkg_resources.resource_filename(resource_package, 'Files/Docs_per_Topic.png'), format='png', dpi=300)
 
     return sent_topics_df
 
@@ -209,7 +212,7 @@ def OA_to_PC_matcher(app_data):
 
     """
     # open dataframe for postcode matching to MSOA
-    lsoaPC_df = pd.read_csv('./data/PC_to_LSOA_dec2011.csv')
+    lsoaPC_df = pd.read_csv(pkg_resources.resource_filename(resource_package, 'data/PC_to_LSOA_dec2011.csv'))
 
     # resolve postcode spacing
     lsoaPC_df['PCD7'] = lsoaPC_df['PCD7'].str.replace(' ', '')

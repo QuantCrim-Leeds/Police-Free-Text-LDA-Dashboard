@@ -7,6 +7,10 @@ import subprocess
 from topic_model_to_Shiny_app.text_preprocessing import preprocessing
 from topic_model_to_Shiny_app.topic_number_selex import topic_number_selector
 from topic_model_to_Shiny_app.dominant_topic_processing import topic_processing
+import pkg_resources
+
+# specify top level package folder
+resource_package = 'topic_model_to_Shiny_app'
 
 # for complete script timing
 def main():
@@ -37,7 +41,7 @@ def main():
 
     print('Initialising Shiny dashboard.')
 
-    shiny_dir = os.path.abspath("Shiny/combined.R")
+    shiny_dir = pkg_resources.resource_filename(resource_package, "Shiny/combined.R")
 
     # process to call shiny app
     # TODO: this partial path call is a security issue
