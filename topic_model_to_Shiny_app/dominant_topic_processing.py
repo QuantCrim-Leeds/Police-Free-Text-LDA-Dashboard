@@ -34,7 +34,7 @@ def topic_processing(output_path):
 
     print('Starting dominant topic processing.')
 
-    (corpus, ldamallet, combined_df) = load_model()
+    (corpus, ldamallet, combined_df) = load_model(output_path=output_path)
 
     top20_df = format_topics_sentences(ldamodel=ldamallet, corpus=corpus,
                                        texts=combined_df['CrimeNotes'], output_path=output_path)
@@ -60,7 +60,7 @@ def topic_processing(output_path):
 
 
 # is this necessary if we don't have a model?
-def load_model():
+def load_model(output_path):
     """
     Load working model
 

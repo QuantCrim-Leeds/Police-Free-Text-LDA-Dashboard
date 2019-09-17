@@ -8,6 +8,7 @@ from topic_model_to_Shiny_app.text_preprocessing import preprocessing
 from topic_model_to_Shiny_app.topic_number_selex import topic_number_selector
 from topic_model_to_Shiny_app.dominant_topic_processing import topic_processing
 import pkg_resources
+import pathlib
 
 # specify top level package folder
 resource_package = 'topic_model_to_Shiny_app'
@@ -18,17 +19,18 @@ def main():
 
     print('Initialising please specify the following parameters.')
 
-    LDA_repeats = int(input("""Please specify the number of LDA repeats for topic number selection\n(n.b The more repeats the longer the runtime): """))
+    existing_model = input('Have you pretrained a working model? (Yes, No) ')
 
-    output_path = str(input('Specify a path for output files: '))
+    output_path = input('Specify a path for output files: ')
 
     pathlib.Path(output_path).mkdir(parents=False, exist_ok=True)
-
-    existing_model = input('Have you pretrained a working model? (Yes, No) ')
 
     print(existing_model)
     # check if you need a new model
     if existing_model.lower() == 'no':
+
+        LDA_repeats = int(input("""Please specify the number of LDA repeats for topic number selection\
+                                \n(n.b The more repeats the longer the runtime): """))
 
         transformed_data = preprocessing()
 
