@@ -17,6 +17,8 @@ corpus = [dictionary.doc2bow(text) for text in common_texts]
 
 resource_package = 'topic_model_to_Shiny_app'
 
+output_path = os.path.join(resource_package, "Files/")
+
 test_dir = os.path.dirname(os.path.abspath(__file__))
 
 class Test(unittest.TestCase):
@@ -83,6 +85,7 @@ class Test(unittest.TestCase):
         self.data = topic_number_selex.calculate_scores(dictionary = common_dictionary,
                                                         corpus = common_corpus,
                                                         texts = common_texts,
+                                                        output_path=output_path,
                                                         limit = 5,
                                                         start = 2, step = 3)
 
@@ -95,6 +98,7 @@ class Test(unittest.TestCase):
         self.data = topic_number_selex.calculate_scores_x3(dictionary = common_dictionary,
                                                            corpus = common_corpus,
                                                            texts = common_texts,
+                                                           output_path=output_path,
                                                            topic_n = range(5, 5 + 6),
                                                            narrow_iter=2)
 
@@ -123,7 +127,10 @@ class Test(unittest.TestCase):
 
         model1 = self.class_(corpus, id2word=dictionary, num_topics=3)
 
-        self.data = dominant_topic_processing.format_topics_sentences(model1, corpus, common_texts)
+        self.data = dominant_topic_processing.format_topics_sentences(model1,
+                                                                      corpus,
+                                                                      common_texts,
+                                                                      output_path=output_path)
 
         self.assertTrue(isinstance(self.data, pd.DataFrame))
 
@@ -147,32 +154,40 @@ class Test(unittest.TestCase):
 
         model1 = self.class_(corpus, id2word=dictionary, num_topics=3)
 
-        self.data = dominant_topic_processing.format_topics_sentences(model1, corpus, common_texts)
+        self.data = dominant_topic_processing.format_topics_sentences(model1,
+                                                                      corpus,
+                                                                      common_texts,
+                                                                      output_path=output_path)
 
         self.top3 = dominant_topic_processing.get_top3_docs(self.data)
 
         self.assertTrue(isinstance(self.top3, pd.DataFrame))
 
 
-    # integration test
-    @patch('builtins.input',return_value=pkg_resources.resource_filename(resource_package, 'tests/test_data/test_data.csv'))
-    @patch('builtins.input',return_value=os.path.join(resource_package, 'File/'))
-    def test_int(self, input):
 
+    @patch('builtins.input', side_effect=[pkg_resources.resource_filename(resource_package, 'tests/test_data/test_data.csv')])
+    def test_int(self, input):
         # run preprocessing function
         # should save data into right places for next function
 
         self.data = text_preprocessing.preprocessing()
 
         # run topic selector function using output from above preprocessing
-        self.data = topic_number_selex.topic_number_selector(self.data, narrow_iter=2)
+        self.data = topic_number_selex.topic_number_selector(self.data,
+                                                             narrow_iter=2,
+                                                             wide_iter=10,
+                                                             output_path=output_path)
 
         # run dominant topic processing
-        self.data = dominant_topic_processing.topic_processing()
+        self.data = dominant_topic_processing.topic_processing(output_path=output_path)
 
-        # check output file exists by loading as pandas and comparing
-        assertEqual(isinstance(pd.read_csv(pkg_resources.resource_filename(resource_package,'data/transformed_data_source.csv'),
-                               pd.DataFrame)))
+        # check output file exits
+        self.assertTrue(os.path.isfile(pkg_resources.resource_filename(resource_package,'data/transformed_data_source.csv')))
+
+        # check file headers are as expected
+        self.assertEqual(pd.read_csv(pkg_resources.resource_filename(resource_package,'data/transformed_data_source.csv'), index_col=0).columns.tolist(),
+                         ["Month","PartialPostCode","Year","CrimeNotes","LDA_Topic","Topic_keywords","Tokens","MSOA","Month2"])
+
 
 if __name__ == "__main__":
 
