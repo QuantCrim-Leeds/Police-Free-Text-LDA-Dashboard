@@ -215,10 +215,10 @@ def OA_to_PC_matcher(app_data):
 
     """
     # open dataframe for postcode matching to MSOA
-    lsoaPC_df = pd.read_csv(pkg_resources.resource_filename(resource_package, 'data/PC_to_LSOA_dec2011.csv'))
+    lsoaPC_df = pd.read_csv(pkg_resources.resource_filename(resource_package, 'data/Leeds_PC_to_OA.csv'))
 
     # resolve postcode spacing
-    lsoaPC_df['PCD7'] = lsoaPC_df['PCD7'].str.replace(' ', '')
+    lsoaPC_df['pcd7'] = lsoaPC_df['pcd7'].str.replace(' ', '')
 
     # reset index
     lsoaPC_df = lsoaPC_df.reset_index()
@@ -230,7 +230,7 @@ def OA_to_PC_matcher(app_data):
 
     for x in app_data['PartialPostCode']:
 
-        matched_MSOA = lsoaPC_df[lsoaPC_df['PCD7'].str.contains(x)].loc[:, 'MSOA11CD'].unique()
+        matched_MSOA = lsoaPC_df[lsoaPC_df['pcd7'].str[:-2] == x].msoa11cd.unique()
 
         MSOA_in_PC.append(','.join(matched_MSOA))
 

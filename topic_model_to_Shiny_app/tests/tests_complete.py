@@ -139,12 +139,15 @@ class Test(unittest.TestCase):
         self.test_data = pd.read_csv(pkg_resources.resource_filename(resource_package,'tests/test_data/PC_to_match.csv'),
                                      index_col=False)
 
-        self.data = dominant_topic_processing.OA_to_PC_matcher(self.test_data)[0].split(',')
+        print(self.test_data.iloc[0,:])
 
-        self.data_match = self.test_data.MSOA.str.split(',', expand=True).values.tolist()[0]
+        self.data = dominant_topic_processing.OA_to_PC_matcher(self.test_data)
 
         # function returns list, so assert list items are equal
-        self.assertCountEqual(self.data, self.data_match)
+        self.assertEqual(self.data[0].split(','), ['E02002340', 'E02002339', 'E02002336', 'E02002343', 'E02002338'] )
+
+        # check ls1 4 postcode
+        self.assertEqual(self.data[1].split(','), ["E02006875","E02002400","E02002392"])
 
     def test_get_top3(self):
         """
