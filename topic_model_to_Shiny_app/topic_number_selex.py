@@ -2,6 +2,7 @@
 # import libraries
 
 import sys
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,12 +10,16 @@ import gensim
 from gensim.corpora import Dictionary
 from gensim.models import CoherenceModel
 import nltk
+import pkg_resources
+import pathlib
 
+# specify top level package folder
+resource_package = 'topic_model_to_Shiny_app'
 
 # specify path to mallet
-mallet_path = './mallet-2.0.8/bin/mallet' # update this path
+mallet_path = pkg_resources.resource_filename(resource_package, 'mallet-2.0.8/bin/mallet') # update this path
 
-def topic_number_selector(processed_data, narrow_iter=2):
+def topic_number_selector(processed_data, output_path, narrow_iter=2, wide_iter=100):
     """
     A function for determining the optimal topic number based on coherence score.
     narrow_iter = number of LDA model repeats
@@ -42,17 +47,19 @@ def topic_number_selector(processed_data, narrow_iter=2):
     coherence_df  = calculate_scores(dictionary=dictionary,
                                                  corpus=corpus,
                                                  texts=crimenotes_corpus,
-                                                 start=2, limit=100, step=5)
+                                                 start=2, limit=wide_iter, step=5,
+                                                 output_path=output_path)
 
     # identify the topic number with the highest coherence score
-    wide_coh_score = coherence_df['Num_topics'].max()
+    wide_coh_score = coherence_df.sort_values(by = 'Coherence_score', ascending=False).Num_topics.tolist()[0]
 
     # use the best topic number to run repeat LDA runs to confirm it scores best
     df_x3 = calculate_scores_x3(dictionary=dictionary,
                                 corpus=corpus,
                                 texts=crimenotes_corpus,
                                 topic_n=range(wide_coh_score, wide_coh_score + 6),
-                                narrow_iter=narrow_iter)
+                                narrow_iter=narrow_iter,
+                                output_path=output_path)
 
     build_optimum_model(df_x3, corpus, dictionary, crimenotes_corpus)
 
@@ -141,7 +148,7 @@ def bag_of_word_processing(corpus_of_tokens):
     return dictionary, corpus
     # topic number determination
 
-def calculate_scores(dictionary, corpus,  texts, limit, start=2, step=3):
+def calculate_scores(dictionary, corpus,  texts, limit, output_path, start=2, step=3):
     """
     Compute c_v coherence for a wide range of topic numbers.
     Adapted from https://www.machinelearningplus.com/nlp/topic-modeling-gensim-python/
@@ -176,12 +183,12 @@ def calculate_scores(dictionary, corpus,  texts, limit, start=2, step=3):
     ax.set_xlabel("No. of topics", fontweight='bold')
     ax.set_ylabel("Cv Coherence score", fontweight='bold')
     ax.axvline(coherence_df[coherence_df['Coherence_score'] == coherence_df['Coherence_score'].max()]['Num_topics'].tolist(), color='red')
-    fig.savefig('./Files/broad_topic_k_search.png', format='png',dpi=300)
+    fig.savefig(os.path.join(output_path, 'broad_topic_k_search.png'), format='png',dpi=300)
 
     return coherence_df
 
 
-def calculate_scores_x3(dictionary, corpus,  texts, topic_n, narrow_iter=2):
+def calculate_scores_x3(dictionary, corpus,  texts, topic_n, output_path, narrow_iter=2):
     """
     Compute c_v coherence for for a narrow range of topics in replicate.
 
@@ -227,7 +234,7 @@ def calculate_scores_x3(dictionary, corpus,  texts, topic_n, narrow_iter=2):
     ax.boxplot(final_df.values, positions=final_df.columns.tolist())
     ax.set_xlabel('No. of topics', fontweight='bold')
     ax.set_ylabel('Cv Coherence Score', fontweight='bold')
-    fig.savefig('./Files/multiple_run_ktopics.png',format='png', dpi=300)
+    fig.savefig(os.path.join(output_path, 'multiple_run_ktopics.png'),format='png', dpi=300)
 
     return final_df
 
@@ -255,7 +262,8 @@ def build_optimum_model(repeated_test_frame, corpus, dictionary, texts):
                                                 corpus = corpus,
                                                 num_topics = int(optimum_topic_k),
                                                 id2word = dictionary,
-                                                prefix = './model/')
+                                                prefix = pkg_resources.resource_filename(resource_package, 'model/')
+                                                )
     print('Model trained.')
     coherencemodel1 = CoherenceModel(model = working_ldamallet,
                                      texts = texts,
@@ -265,9 +273,9 @@ def build_optimum_model(repeated_test_frame, corpus, dictionary, texts):
     print('Working model coherence score: ', coherencemodel1.get_coherence())
 
     # save new working model
-    working_ldamallet.save('./model/working_ldamallet_model.gensim')
+    working_ldamallet.save(pkg_resources.resource_filename(resource_package, 'model/working_ldamallet_model.gensim'))
 
-    gensim.corpora.MmCorpus.serialize("./data/BoW_corpus.mm", corpus)
+    gensim.corpora.MmCorpus.serialize(pkg_resources.resource_filename(resource_package, 'data/BoW_corpus.mm'), corpus)
     print('Model saved.')
 
     return

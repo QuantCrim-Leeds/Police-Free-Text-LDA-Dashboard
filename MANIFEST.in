@@ -1,0 +1,8 @@
+include requirements.txt
+include README.md
+recursive-include topic_model_to_Shiny_app/tests *
+recursive-include topic_model_to_Shiny_app/data *
+recursive-include topic_model_to_Shiny_app/Files *
+recursive-include topic_model_to_Shiny_app/Shiny *
+recursive-include topic_model_to_Shiny_app/model *
+recursive-include topic_model_to_Shiny_app/mallet-2.0.8 *
