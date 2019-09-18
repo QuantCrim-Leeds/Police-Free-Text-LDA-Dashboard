@@ -20,7 +20,7 @@ library(here)
 # loading data
 OA_hh <- data.frame(read.csv(here('topic_model_to_Shiny_app','Shiny','static','Leeds_MSOA_2.csv')))
 
-LeedsOA <- geojsonio::geojson_read(here('topic_model_to_Shiny_app','Shiny','static','Leeds_MSOA.geojson'), what = 'sp')
+LeedsOA <- geojsonio::geojson_read('https://raw.githubusercontent.com/martinjc/UK-GeoJSON/master/json/statistical/eng/msoa_by_lad/E08000035.json', what = 'sp')
 
 # only first 10 cols are there are no others
 LDA_df <- data.frame(read.csv(here('topic_model_to_Shiny_app','data','transformed_data_source.csv'), row.names='X'))
@@ -40,26 +40,33 @@ server <- function(input, output, session) {
       }
 
       # perform incident counting
-      lsoa_count <- as.data.frame(table(unlist(strsplit(as.character(manip_df$MSOA), ','), recursive=FALSE)))
+      lsoa_full <- as.data.frame(table(unlist(strsplit(as.character(manip_df$MSOA), ','), recursive=FALSE)))
 
-      colnames(lsoa_count) <- c('code','freq')
+      colnames(lsoa_full) <- c('code','freq')
 
       # filling in missing lsoa after counting
       '%!in%' <- function(x,y)!('%in%'(x,y))
 
       # get all output area names
-      OA_names <- data.frame(LeedsOA$msoa01cd)
+      OA_names <- data.frame(LeedsOA$MSOA11CD)
 
       print('Test if i get here')
 
       colnames(OA_names) <- c('code')
 
-      missing_df <- data.frame(OA_names$code[OA_names$code %!in% lsoa_count$code], 0)
-
-      colnames(missing_df) <- c('code','freq')
-
-      lsoa_full <- rbind(lsoa_count, missing_df)
-
+      # if there are missing MSOA codes in the counts of MSOAs 
+      if (length(OA_names$code[OA_names$code %!in% lsoa_full$code]) != 0) {
+        
+        # create a dataframe of MSOA codes with a count of 0
+        missing_df <- data.frame(OA_names$code[OA_names$code %!in% lsoa_full$code], 0)
+        
+        # rename column headers
+        colnames(missing_df) <- c('code','freq')
+        
+        # row bind these new 0 rows to existing counts per msoa to lsoa_full
+        lsoa_full <- rbind(lsoa_full, missing_df)
+        
+      }
       # if the dataframe ever changes the 2nd column selected here changes by the number of columns added/removed
       # must select the strsplit col and CrimeNotes col
       reports <- unnest(manip_df, strsplit(as.character(manip_df$MSOA),','))#[,c(4,11)]
@@ -78,7 +85,7 @@ server <- function(input, output, session) {
       }
 
       # return final ordered lsoa plus counts
-      lsoa_full <- lsoa_full[match(LeedsOA@data$msoa01cd, lsoa_full$code),]
+      lsoa_full <- lsoa_full[match(LeedsOA@data$MSOA11CD, lsoa_full$code),]
 
 
       pal <- colorNumeric(c('white', 'red'), domain = lsoa_full$freq)
@@ -320,4 +327,6 @@ ui <- dashboardPage(
   dashboardSidebar(disable = TRUE),
   body)
 
-runApp(list(ui = ui, server = server), launch.browser = TRUE)
+profvis({
+  runApp(list(ui = ui, server = server), launch.browser = TRUE)
+})

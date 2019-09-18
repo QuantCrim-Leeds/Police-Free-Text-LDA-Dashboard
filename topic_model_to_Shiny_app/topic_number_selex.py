@@ -51,7 +51,7 @@ def topic_number_selector(processed_data, output_path, narrow_iter=2, wide_iter=
                                                  output_path=output_path)
 
     # identify the topic number with the highest coherence score
-    wide_coh_score = coherence_df['Num_topics'].max()
+    wide_coh_score = coherence_df.sort_values(by = 'Coherence_score', ascending=False).Num_topics.tolist()[0]
 
     # use the best topic number to run repeat LDA runs to confirm it scores best
     df_x3 = calculate_scores_x3(dictionary=dictionary,
