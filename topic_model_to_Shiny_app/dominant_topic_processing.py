@@ -230,7 +230,7 @@ def OA_to_PC_matcher(app_data):
 
     for x in app_data['PartialPostCode']:
 
-        matched_MSOA = lsoaPC_df[lsoaPC_df['pcd7'].str[:-2] == x].loc[:, 'msoa11cd'].unique()
+        matched_MSOA = lsoaPC_df[lsoaPC_df['pcd7'].str[:-2] == x].msoa11cd.unique()
 
         MSOA_in_PC.append(','.join(matched_MSOA))
 
