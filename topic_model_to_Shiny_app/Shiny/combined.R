@@ -54,18 +54,18 @@ server <- function(input, output, session) {
 
       colnames(OA_names) <- c('code')
 
-      # if there are missing MSOA codes in the counts of MSOAs 
+      # if there are missing MSOA codes in the counts of MSOAs
       if (length(OA_names$code[OA_names$code %!in% lsoa_full$code]) != 0) {
-        
+
         # create a dataframe of MSOA codes with a count of 0
         missing_df <- data.frame(OA_names$code[OA_names$code %!in% lsoa_full$code], 0)
-        
+
         # rename column headers
         colnames(missing_df) <- c('code','freq')
-        
+
         # row bind these new 0 rows to existing counts per msoa to lsoa_full
         lsoa_full <- rbind(lsoa_full, missing_df)
-        
+
       }
       # if the dataframe ever changes the 2nd column selected here changes by the number of columns added/removed
       # must select the strsplit col and CrimeNotes col
@@ -130,7 +130,7 @@ server <- function(input, output, session) {
 
       # set rows to 1 to 24 month counts
       # unclear this is necessary?
-      # TODO: but needs to be able to handle data with missing months etc 
+      # TODO: but needs to be able to handle data with missing months etc
       #topictime <- data.frame(topictime, row.names = c(input$MonYear[1]:input$MonYear[2]))
 
       # create a dataframe of ordered topics for correct alignment and column naming
@@ -327,6 +327,4 @@ ui <- dashboardPage(
   dashboardSidebar(disable = TRUE),
   body)
 
-profvis({
-  runApp(list(ui = ui, server = server), launch.browser = TRUE)
-})
+runApp(list(ui = ui, server = server), launch.browser = TRUE)
