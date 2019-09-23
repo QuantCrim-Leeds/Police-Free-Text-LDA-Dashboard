@@ -7,9 +7,14 @@ import gensim
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
+import pkg_resources
 
 nltk.download('stopwords')
 nltk.download('wordnet')
+
+# specify top level package folder
+resource_package = 'topic_model_to_Shiny_app'
+
 
 # main function that performs preprocessing
 def preprocessing():
@@ -135,7 +140,7 @@ def remove_stopwords(text):
     """Removes stopwords using WordNet english list and and additionals passed to stopword.txt file."""
     # removing stop words from the data
     stop_words = stopwords.words('english')
-    stop_words.extend([line.strip() for line in open('./data/stopwords.txt')])
+    stop_words.extend([line.strip() for line in open(pkg_resources.resource_filename(resource_package, 'data/stopwords.txt'))])
 
     return [[word for word in gensim.utils.simple_preprocess(str(doc)) if word not in stop_words] for doc in text]
 
@@ -165,7 +170,7 @@ def n_gram(tokens):
 def output_processed_data(dataframe):
     """ Outputs dataframe with tokenised data in a new column as a .csv"""
     # saves dataframe and processed corpus of tokens
-    dataframe.to_csv('./data/data_processed.csv')
+    dataframe.to_csv(pkg_resources.resource_filename(resource_package, 'data/data_processed.csv'))
 
     print('Data saved in data folder. Preprocessing complete.')
 

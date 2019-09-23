@@ -4,14 +4,18 @@
 # TODO ordering of dominant_topic_processing function needs function calls adding
 # develop some unit tests
 # import libraries
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import gensim
 from gensim.corpora.mmcorpus import MmCorpus
+import pkg_resources
+
+# specify top level package folder
+resource_package = 'topic_model_to_Shiny_app'
 
 
-
-def topic_processing():
+def topic_processing(output_path):
     """
     Applying dominant topic labelling to processed corpus.
     -------
@@ -29,22 +33,23 @@ def topic_processing():
 
     print('Starting dominant topic processing.')
 
-    (corpus, ldamallet, combined_df) = load_model()
+    (corpus, ldamallet, combined_df) = load_model(output_path=output_path)
 
-    top20_df = format_topics_sentences(ldamodel=ldamallet, corpus=corpus, texts=combined_df['CrimeNotes'])
+    top20_df = format_topics_sentences(ldamodel=ldamallet, corpus=corpus,
+                                       texts=combined_df['CrimeNotes'], output_path=output_path)
 
     print('Dominant topic segmentation complete.')
 
     # commenting out for testing
     representative_docs = get_top3_docs(top20_df)
 
-    representative_docs.to_csv('./Files/Example_MOs_per_topic.csv')
+    representative_docs.to_csv(os.path.join(output_path, 'Example_MOs_per_topic.csv'))
 
     print('Example MOs written to Files folder.')
 
     data_for_app = data_preparations(combined_df, top20_df)
 
-    data_for_app.to_csv('./data/transformed_data_source.csv')
+    data_for_app.to_csv(pkg_resources.resource_filename(resource_package, 'data/transformed_data_source.csv'))
 
     print('Transformed data saved in data folder.')
 
@@ -54,7 +59,7 @@ def topic_processing():
 
 
 # is this necessary if we don't have a model?
-def load_model():
+def load_model(output_path):
     """
     Load working model
 
@@ -65,17 +70,17 @@ def load_model():
     """
 
     # load data
-    combined_df = pd.read_csv("./data/data_processed.csv", index_col=0)
+    combined_df = pd.read_csv(pkg_resources.resource_filename(resource_package, "data/data_processed.csv"), index_col=0)
 
-    corpus = MmCorpus("./data/BoW_corpus.mm")
+    corpus = MmCorpus(pkg_resources.resource_filename(resource_package, "data/BoW_corpus.mm"))
     print('Data loaded.')
     # load the mallet model
-    ldamallet = gensim.models.wrappers.LdaMallet.load('./model/working_ldamallet_model.gensim')
+    ldamallet = gensim.models.wrappers.LdaMallet.load(pkg_resources.resource_filename(resource_package, 'model/working_ldamallet_model.gensim'))
     print('Model loaded.')
     # write out topics to a text file
     topics = ldamallet.print_topics(num_topics=-1, num_words=7)
 
-    with open('./Files/LDA_topics.txt', 'w') as topic_file:
+    with open(os.path.join(output_path, 'LDA_topics.txt'), 'w') as topic_file:
         for topic in topics:
             topic_file.write(str(topic) + '\n')
     print('Topics written to data folder.')
@@ -83,7 +88,7 @@ def load_model():
     return (corpus, ldamallet, combined_df)
 
 # inputs are model, corpus and original texts
-def format_topics_sentences(ldamodel, corpus, texts):
+def format_topics_sentences(ldamodel, corpus, texts, output_path):
     # Init output
     sent_topics_df = pd.DataFrame()
 
@@ -116,7 +121,7 @@ def format_topics_sentences(ldamodel, corpus, texts):
     sent_topics_df['Dominant_Topic'].value_counts().sort_index().plot(kind='bar', figsize=(12, 10))
     plt.xlabel('Topic number', fontweight='bold')
     plt.ylabel('Number of docs', fontweight='bold')
-    plt.savefig('./Files/Docs_per_Topic.png', format='png', dpi=300)
+    plt.savefig(os.path.join(output_path, 'Docs_per_Topic.png'), format='png', dpi=300)
 
     return sent_topics_df
 
@@ -209,10 +214,10 @@ def OA_to_PC_matcher(app_data):
 
     """
     # open dataframe for postcode matching to MSOA
-    lsoaPC_df = pd.read_csv('./data/PC_to_LSOA_dec2011.csv')
+    lsoaPC_df = pd.read_csv(pkg_resources.resource_filename(resource_package, 'data/Leeds_PC_to_OA.csv'))
 
     # resolve postcode spacing
-    lsoaPC_df['PCD7'] = lsoaPC_df['PCD7'].str.replace(' ', '')
+    lsoaPC_df['pcd7'] = lsoaPC_df['pcd7'].str.replace(' ', '')
 
     # reset index
     lsoaPC_df = lsoaPC_df.reset_index()
@@ -224,7 +229,7 @@ def OA_to_PC_matcher(app_data):
 
     for x in app_data['PartialPostCode']:
 
-        matched_MSOA = lsoaPC_df[lsoaPC_df['PCD7'].str.contains(x)].loc[:, 'MSOA11CD'].unique()
+        matched_MSOA = lsoaPC_df[lsoaPC_df['pcd7'].str[:-2] == x].msoa11cd.unique()
 
         MSOA_in_PC.append(','.join(matched_MSOA))
 

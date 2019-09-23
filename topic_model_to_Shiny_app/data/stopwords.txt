@@ -1,0 +1,11 @@
+suspect
+suspects
+victim
+ft
+victims
+time
+comp
+complainant
+stated
+unknown
+property
