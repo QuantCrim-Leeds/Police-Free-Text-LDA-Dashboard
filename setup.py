@@ -4,10 +4,6 @@ def readme():
     with open('readme.md') as f:
         return f.read()
 
-def read_reqs():
-    with open('requirements.txt') as f:
-        return [pkg.rstrip('\n') for pkg in f]
-
 setup(
     name='topic_model_to_Shiny_app',
     url='https://github.com/Sparrow0hawk/topic_model_to_Shiny_app',
