@@ -29,6 +29,10 @@ coverage.xml
 
 # R stuff
 .Rhistory
+.Rhistory
+packrat/lib*/
+packrat/src*/
 .Rproj.user
 
+# small test file for local use
 short_test.py
