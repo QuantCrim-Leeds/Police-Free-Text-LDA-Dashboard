@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 import gensim
 from gensim.corpora.mmcorpus import MmCorpus
 import pkg_resources
-import pathlib
 
 # specify top level package folder
 resource_package = 'topic_model_to_Shiny_app'
