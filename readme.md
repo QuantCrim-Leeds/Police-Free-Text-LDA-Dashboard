@@ -46,5 +46,8 @@ python topic_model_to_Shiny_app/master_run.py
 This will prompt calls for paths to datafiles and path for output file.
 The process may take some time to run with large datasets and will automatically load
 a Shiny app if R is installed (loaded required packages using packrat).
+<<<<<<< HEAD
 
 ![alt text](to be added)
+=======
+>>>>>>> ea6b6b6420dca021d12363ec9d7d011501ed2ad9
