@@ -25,7 +25,7 @@ Data format expected for this is:
 
 This package can be used by building a conda environment as specified by the environment.yml file.
 
-```
+```{bash}
 conda env create -f environment.yml
 source activate topicmodel1
 ```
