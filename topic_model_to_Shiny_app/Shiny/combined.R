@@ -1,5 +1,10 @@
 #! /usr/bin/Rscript
 
+# handling packrat 
+if (system.file(package = "packrat") == "") install.packages("packrat")
+
+packrat::restore()
+
 # server file
 # now loading newest dataset
 library(methods)
@@ -15,6 +20,7 @@ library(shiny)
 library(leaflet)
 library(plotly)
 library(here)
+library(geojsonio)
 
 
 # loading data
@@ -69,10 +75,12 @@ server <- function(input, output, session) {
       }
       # if the dataframe ever changes the 2nd column selected here changes by the number of columns added/removed
       # must select the strsplit col and CrimeNotes col
-      reports <- unnest(manip_df, strsplit(as.character(manip_df$MSOA),','))#[,c(4,11)]
-
+      reports <- manip_df %>%
+        transform(MSOA = strsplit(as.character(MSOA),',')) %>%
+        unnest(MSOA)
+      
       reports <- reports %>%
-        group_by(`strsplit(as.character(manip_df$MSOA), ",")`) %>%
+        group_by(MSOA) %>%
         summarise(CrimeNotes = paste(CrimeNotes, collapse = '<br> <br>'))
 
       names(reports) <- c('code','CrimeNotes')
