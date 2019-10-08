@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/Sparrow0hawk/topic_model_to_Shiny.svg?token=WAzszY1JKmTcLxy5prby&branch=master)](https://travis-ci.com/Sparrow0hawk/topic_model_to_Shiny_app)
+[![Build Status](https://travis-ci.com/Sparrow0hawk/topic_model_to_Shiny_app.svg?branch=master)](https://travis-ci.com/Sparrow0hawk/topic_model_to_Shiny_app)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/9bc12c76cc934008b3e081149de02b78)](https://www.codacy.com?utm_source=github.com&utm_medium=referral&utm_content=Sparrow0hawk/topic_model_to_Shiny&utm_campaign=Badge_Coverage)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9bc12c76cc934008b3e081149de02b78)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Sparrow0hawk/topic_model_to_Shiny&amp;utm_campaign=Badge_Grade)
 
