@@ -15,6 +15,9 @@ import pkg_resources
 # specify top level package folder
 resource_package = 'topic_model_to_Shiny_app'
 
+# for windows declare mallet environment variable
+os.environ['MALLET_HOME'] = pkg_resources.resource_filename(resource_package, 'mallet-2.0.8')
+
 # specify path to mallet
 mallet_path = pkg_resources.resource_filename(resource_package, 'mallet-2.0.8/bin/mallet') # update this path
 

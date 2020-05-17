@@ -10,4 +10,7 @@ dependencies:
   - pytest
   - nltk=3.4.5
   - matplotlib=3.2
+  - pylint
+  - openjdk=8
+  - coverage
 

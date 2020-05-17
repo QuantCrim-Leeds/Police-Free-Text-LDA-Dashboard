@@ -39,3 +39,4 @@ packrat/src*/
 # small test file for local use
 .vagrant/*
 short_test.py
+.vscode/settings.json

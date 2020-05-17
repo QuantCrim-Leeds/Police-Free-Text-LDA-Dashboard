@@ -1,7 +1,47 @@
 language: python
-python:
-  - "3.6.8"
-
+matrix:
+  include:
+    - name: "Xenial Linux"
+      python: 3.7           # this works for Linux but is ignored on macOS or Windows
+      before_install:
+        - wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+        - bash miniconda.sh -b -p $HOME/miniconda
+        - export PATH="$HOME/miniconda/bin:$PATH"
+        - export BOTO_CONFIG=/dev/null
+        - hash -r
+        - conda config --set always_yes yes --set changeps1 no
+        - conda config --add channels conda-forge
+        - conda update -q conda
+        - conda info -a
+    - name: "macOS"
+      os: osx
+      osx_image: xcode11.3  # Python 3.7.2 running on macOS 10.14.3
+      language: shell       # 'language: python' is an error on Travis CI macOS
+      # python: 3.7         # 'python:' is ignored on Travis CI macOS
+      before_install: 
+        - wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
+        - bash miniconda.sh -b -p $HOME/miniconda
+        - export PATH="$HOME/miniconda/bin:$PATH"
+        - export BOTO_CONFIG=/dev/null
+        - hash -r
+        - conda config --set always_yes yes --set changeps1 no
+        - conda config --add channels conda-forge
+        - conda update -q conda
+        - conda info -a
+    - name: "windows"
+      os: windows
+      language: shell
+      before_install:
+        - choco install anaconda3 --params '"/AddToPath /JustMe"'
+        - export PATH="/c/tools/anaconda3:/c/tools/anaconda3/Scripts:$PATH"
+        - source activate base
+        - conda config --set always_yes yes --set changeps1 no
+        - conda clean --all
+        - conda config --add channels conda-forge
+        - conda update -q conda
+        - conda info -a 
+  allow_failures:
+    -  name: "macOS"
 branches:
   only:
     - master
@@ -9,20 +49,11 @@ branches:
     - release
 
 install:
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - export BOTO_CONFIG=/dev/null
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda config --add channels conda-forge
-  - conda update -q conda
-  - conda info -a
   - conda env create -f environment.yml
-  - source activate topicmodel1
+  - source activate topicmodel
 
 script:
   - python setup.py install
-  - coverage run -m unittest discover topic_model_to_Shiny_app/tests/
+  - travis_wait 60 coverage run -m pytest -v topic_model_to_Shiny_app/tests/
   - coverage xml
-  - python-codacy-coverage -r coverage.xml
+  - bash <(wget -q -O - https://coverage.codacy.com/get.sh) report -l python -r coverage.xml
