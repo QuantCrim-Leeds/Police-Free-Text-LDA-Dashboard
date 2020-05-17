@@ -9,6 +9,8 @@ topic_model_to_Shiny_app/Files/*
 topic_model_to_Shiny_app/model/*
 .ipynb_checkpoints
 /*.egg-info
+build/*
+dist/*
 
 # processed data files
 *.pkl
@@ -35,4 +37,5 @@ packrat/src*/
 .Rproj.user
 
 # small test file for local use
+.vagrant/*
 short_test.py
