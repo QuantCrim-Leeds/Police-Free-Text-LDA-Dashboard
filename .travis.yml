@@ -41,7 +41,7 @@ matrix:
         - conda update -q conda
         - conda info -a 
   allow_failures:
-    -  name: "macOS"
+    -  name: "windows"
 branches:
   only:
     - master
@@ -54,6 +54,6 @@ install:
 
 script:
   - python setup.py install
-  - travis_wait 60 coverage run -m pytest -v topic_model_to_Shiny_app/tests/
+  - travis_wait 90 coverage run -m pytest -v topic_model_to_Shiny_app/tests/
   - coverage xml
   - bash <(wget -q -O - https://coverage.codacy.com/get.sh) report -l python -r coverage.xml
