@@ -29,14 +29,17 @@ class Test(unittest.TestCase):
 
         self.model = self.class_(corpus, id2word=dictionary, num_topics=3)
 
-    @patch('builtins.input',return_value=pkg_resources.resource_filename(resource_package, 'tests/test_data/test_data.csv'))
-    def test_initial_data_import(self, input):
+    def test_initial_data_import(self):
 
-        self.data = text_preprocessing.initial_data_import()
-
-        print(self.data)
+        self.data = text_preprocessing.initial_data_import(data_path=pkg_resources.resource_filename(resource_package, 'tests/test_data/test_data.csv'))
 
         self.assertTrue(isinstance(self.data, pd.DataFrame))
+
+        with self.assertRaises(SystemExit) as cm:
+
+            self.data = text_preprocessing.initial_data_import(data_path=pkg_resources.resource_filename(resource_package, 'tests/test_data/test_data2.csv'))
+
+        self.assertEqual(cm.exception.code, 0)
 
     def test_validate_input_data(self):
 
@@ -59,10 +62,9 @@ class Test(unittest.TestCase):
 
         self.assertEqual(text_preprocessing.remove_stopwords([['the','and','jackal']]), [['jackal']])
 
-    @patch('builtins.input',return_value=pkg_resources.resource_filename(resource_package,'tests/test_data/test_data.csv'))
-    def test_full_preprocessing(self, input):
+    def test_full_preprocessing(self):
 
-        self.data = text_preprocessing.preprocessing()
+        self.data = text_preprocessing.preprocessing(data_path=pkg_resources.resource_filename(resource_package,'tests/test_data/test_data.csv'))
 
         self.assertTrue(isinstance(self.data, pd.DataFrame))
 
@@ -168,12 +170,11 @@ class Test(unittest.TestCase):
 
 
 
-    @patch('builtins.input', side_effect=[pkg_resources.resource_filename(resource_package, 'tests/test_data/test_data.csv')])
-    def test_int(self, input):
+    def test_int(self):
         # run preprocessing function
         # should save data into right places for next function
 
-        self.data = text_preprocessing.preprocessing()
+        self.data = text_preprocessing.preprocessing(data_path=pkg_resources.resource_filename(resource_package, 'tests/test_data/test_data.csv'))
 
         # run topic selector function using output from above preprocessing
         self.data = topic_number_selex.topic_number_selector(self.data,

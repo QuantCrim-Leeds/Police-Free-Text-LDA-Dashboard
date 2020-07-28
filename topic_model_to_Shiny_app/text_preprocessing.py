@@ -1,6 +1,7 @@
 # script for preprocessing text data for LDA
 # import libraries
 import sys
+import os
 import numpy as np
 import pandas as pd
 import gensim
@@ -17,10 +18,10 @@ resource_package = 'topic_model_to_Shiny_app'
 
 
 # main function that performs preprocessing
-def preprocessing():
+def preprocessing(data_path : str):
     """Complete preprocessing script that outputs dataframe with new tokens column."""
 
-    working_dataframe = initial_data_import()
+    working_dataframe = initial_data_import(data_path)
 
     validated_dataframe = validate_input_data(working_dataframe)
 
@@ -51,18 +52,27 @@ def preprocessing():
     return validated_dataframe
 
 
-def initial_data_import():
-    """Imports initial .csv dataframe converts into pandas object."""
+def initial_data_import(data_path : str):
+    """
+    Imports initial .csv dataframe converts into pandas object.
+
+    :param data_path: this is a string of the full path to data file
+
+    :returns: pd.DataFrame object 
+    """
 
     print('Beginning text preprocessing.')
     # specifying data directory
 
-    data_path = str(input('Specify the full path to the input :'))
-
     # validate that the file format is .csv
+    if os.path.isfile(data_path):
 
-    if str(data_path[-4:]) != '.csv':
-        print('Please confirm you are passing a .csv file type.')
+        original_frame = pd.read_csv(data_path.strip(), encoding='latin1')
+
+    else:
+        print('File does not exist.')
+        print('Please check the directory you passed: \n',data_path)
+        sys.exit(0)
 
     # reading data
     original_frame = pd.read_csv(data_path.strip(), encoding='latin1')
