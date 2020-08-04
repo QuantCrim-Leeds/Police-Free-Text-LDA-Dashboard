@@ -36,6 +36,9 @@ def preprocessing():
 
     print('Stopwords removed.')
 
+    # add ngram step
+    n_gram(words)
+
     validated_dataframe.loc[:,'Tokens'] = words
 
     #create string joined by , if tokens present else add NaN
