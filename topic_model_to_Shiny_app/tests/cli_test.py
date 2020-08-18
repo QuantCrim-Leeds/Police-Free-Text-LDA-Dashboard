@@ -16,18 +16,13 @@ class CLI_test(unittest.TestCase):
         # TODO: update these to actually test CLI
         runner = CliRunner()
         result = runner.invoke(main, 
-                               ['--input-data', str(pkg_resources.resource_filename(resource_package, 'tests/test_data/test_data.csv')),
-                                '--output-dir', str(os.path.join(test_dir,'test_output')),
-                                '--num-runs', '3',
-                                '--pretrained', 'False',
-                                '--shiny-start', 'False'])
-        print(result)
-        self.assertEqual(result.exit_code, 0)
-
-
-    def test_CLI_fail(self):
-
-        return
+                               f'''--input-path {os.path.join(test_dir,'test_data','test_data.csv')}
+                                --output-directory {os.path.join(test_dir,'testout')}
+                                --num-runs 2
+                                --max-topic 10
+                                --pretrained False
+                                --shiny-start False''')
+        self.assertIsNone(result.exception)
 
 
 if __name__ == "__main__":

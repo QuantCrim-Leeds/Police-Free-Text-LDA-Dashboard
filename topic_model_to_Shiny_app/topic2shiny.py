@@ -18,6 +18,8 @@ resource_package = 'topic_model_to_Shiny_app'
               help='The absolute path to an directory for outputs, will create a new directory if required.')
 @click.option('-n', '--num-runs', prompt='Please specify the number of LDA repeats for topic number selection', type=int,
               help='The number of LDA repeat runs desired to establish working topic number.')
+@click.option('-m', '--max-topic', prompt='Please specify the upper bound of topic numbers to search for an optimal topic number', type=int,
+              help='A maximum number of topics to fit models too when looking for an optimal topic number.', default=100)
 @click.option('-p', '--pretrained', default=False, type=bool,
               help='A boolean to check if user wishes to use a pretrained model.')
 @click.option('-m', '--pretrained-model', type=str,
@@ -28,6 +30,7 @@ resource_package = 'topic_model_to_Shiny_app'
 def main(input_path : str, 
          output_directory : str,
          num_runs : int, 
+         max_topic : int,
          pretrained : bool, 
          pretrained_model : str,
          shiny_start : bool):
@@ -52,7 +55,7 @@ def main(input_path : str,
         transformed_data = preprocessing(input_path)
 
         topic_number_selector(processed_data = transformed_data, output_path=output_directory,
-                              narrow_iter = num_runs, wide_iter = 100)
+                              narrow_iter = num_runs, wide_iter = max_topic)
 
     else:
         # TODO: write in how to load a pretrained model
