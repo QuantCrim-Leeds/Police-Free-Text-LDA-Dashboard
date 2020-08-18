@@ -15,4 +15,5 @@ dependencies:
     - coverage
     - pytest
     - pylint
+    - click
 

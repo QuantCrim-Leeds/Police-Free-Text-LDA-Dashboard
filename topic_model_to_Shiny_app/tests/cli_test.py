@@ -9,7 +9,7 @@ resource_package = 'topic_model_to_Shiny_app'
 
 test_dir = os.path.dirname(os.path.abspath(__file__))
 
-class CLI_test(unittest.TestCase):
+class CommandLineInterfaceTests(unittest.TestCase):
 
     def test_CLI(self):
         # these are examples and will fail
