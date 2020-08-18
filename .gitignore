@@ -11,6 +11,7 @@ topic_model_to_Shiny_app/model/*
 /*.egg-info
 build/*
 dist/*
+**/tests/testout/*
 
 # processed data files
 *.pkl
