@@ -163,7 +163,6 @@ def data_preparations(data_source, dominant_topic_frame):
     # select required columns for application
     app_data_source = app_data_source.loc[:, ['Month',
                                               'PartialPostCode',
-                                              'Year',
                                               'CrimeNotes',
                                               'LDA_Topic',
                                               'Topic_keywords',

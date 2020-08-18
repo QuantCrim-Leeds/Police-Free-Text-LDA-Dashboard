@@ -3,6 +3,7 @@
 # need to include assert statements to validate the output against expected values
 
 import os
+import pytest
 import unittest
 from unittest.mock import patch
 import pandas as pd
@@ -169,10 +170,13 @@ class Test(unittest.TestCase):
         self.assertTrue(isinstance(self.top3, pd.DataFrame))
 
 
-
+    @pytest.mark.skip() 
     def test_int(self):
-        # run preprocessing function
-        # should save data into right places for next function
+        """
+        A test that runs all three steps together as an integration-like test
+
+        skipped as CLI test simply repeats this through CLI
+        """
 
         self.data = text_preprocessing.preprocessing(data_path=pkg_resources.resource_filename(resource_package, 'tests/test_data/test_data.csv'))
 
@@ -190,7 +194,7 @@ class Test(unittest.TestCase):
 
         # check file headers are as expected
         self.assertEqual(pd.read_csv(pkg_resources.resource_filename(resource_package,'data/transformed_data_source.csv'), index_col=0).columns.tolist(),
-                         ["Month","PartialPostCode","Year","CrimeNotes","LDA_Topic","Topic_keywords","Tokens","MSOA","Month2"])
+                         ["Month","PartialPostCode","CrimeNotes","LDA_Topic","Topic_keywords","Tokens","MSOA","Month2"])
 
 
 if __name__ == "__main__":
