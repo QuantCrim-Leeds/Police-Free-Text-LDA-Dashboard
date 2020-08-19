@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.com/Sparrow0hawk/topic_model_to_Shiny_app.svg?branch=master)](https://travis-ci.com/Sparrow0hawk/topic_model_to_Shiny_app)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/9bc12c76cc934008b3e081149de02b78)](https://www.codacy.com?utm_source=github.com&utm_medium=referral&utm_content=Sparrow0hawk/topic_model_to_Shiny&utm_campaign=Badge_Coverage)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9bc12c76cc934008b3e081149de02b78)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Sparrow0hawk/topic_model_to_Shiny&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.com/QuantCrim-Leeds/Police-Free-Text-LDA-Dashboard.svg?branch=master)](https://travis-ci.com/QuantCrim-Leeds/Police-Free-Text-LDA-Dashboard)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/6d9d5c167dae4405b96dfe4ba2d21228)](https://www.codacy.com/gh/QuantCrim-Leeds/Police-Free-Text-LDA-Dashboard?utm_source=github.com&utm_medium=referral&utm_content=QuantCrim-Leeds/Police-Free-Text-LDA-Dashboard&utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/6d9d5c167dae4405b96dfe4ba2d21228)](https://www.codacy.com/gh/QuantCrim-Leeds/Police-Free-Text-LDA-Dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=QuantCrim-Leeds/Police-Free-Text-LDA-Dashboard&amp;utm_campaign=Badge_Grade)
 
 # Topic Model to Shiny App
 
