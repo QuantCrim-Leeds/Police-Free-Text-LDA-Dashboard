@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.com/QuantCrim-Leeds/Police-Free-Text-LDA-Dashboard.svg?branch=master)](https://travis-ci.com/QuantCrim-Leeds/Police-Free-Text-LDA-Dashboard)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/6d9d5c167dae4405b96dfe4ba2d21228)](https://www.codacy.com/gh/QuantCrim-Leeds/Police-Free-Text-LDA-Dashboard?utm_source=github.com&utm_medium=referral&utm_content=QuantCrim-Leeds/Police-Free-Text-LDA-Dashboard&utm_campaign=Badge_Coverage)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/6d9d5c167dae4405b96dfe4ba2d21228)](https://www.codacy.com/gh/QuantCrim-Leeds/Police-Free-Text-LDA-Dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=QuantCrim-Leeds/Police-Free-Text-LDA-Dashboard&amp;utm_campaign=Badge_Grade)
+![No-maintainence-intended](https://img.shields.io/badge/No%20Maintenance%20Intended-%E2%9C%95-red.svg)
 
 # Topic Model to Shiny App
 
